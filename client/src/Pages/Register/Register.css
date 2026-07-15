@@ -1,0 +1,91 @@
+.register-page {
+  min-height: 100vh;
+  background: linear-gradient(to right, #0f172a, #1e293b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.register-container {
+  width: 400px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.register-container h1 {
+  margin-bottom: 10px;
+  font-size: 32px;
+}
+
+.register-subtitle {
+  color: lightgray;
+  margin-bottom: 30px;
+}
+
+.register-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.register-container input {
+  padding: 14px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.register-container input:focus {
+  border: 2px solid #2563eb;
+}
+
+.register-container button[type="submit"] {
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-container button[type="submit"]:hover {
+  background: #1d4ed8;
+}
+
+.login-text {
+  margin-top: 25px;
+  color: lightgray;
+}
+
+.login-link {
+  background: none;
+  border: none;
+  color: #60a5fa;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 500px) {
+  .register-container {
+    width: 90%;
+    padding: 30px 20px;
+  }
+
+  .register-container h1 {
+    font-size: 26px;
+  }
+}
