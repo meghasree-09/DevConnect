@@ -12,6 +12,12 @@ import Register from "./Pages/Register/Register";
 import Users from "./Pages/Users/Users.jsx";
 import EditUser from "./Pages/EditUser/EditUser.jsx";
 import ErrorPage from "./Pages/ErrorPage/ErrorPage";
+import UserDashboard from "./Pages/Dashboard/UserDashboard";
+import LeadDashboard from "./Pages/Dashboard/LeadDashboard";
+import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
+import CreateProjects from "./Pages/Project/CreateProjects";
+import ManageProjects from "./Pages/Project/ManageProjects";
+import TeamRequests from "./Pages/Project/TeamRequests";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -91,6 +97,41 @@ function App() {
             users={users}
             setUsers={setUsers}
           />
+        }
+      />
+      <Route
+        path="/user"
+        element={<UserDashboard />}
+      />
+
+      <Route
+        path="/lead"
+        element={<LeadDashboard />}
+      />
+
+      <Route
+        path="/admin"
+        element={<AdminDashboard />}
+      />
+
+      <Route
+        path="/create-project"
+        element={
+          <CreateProjects  />
+        }
+      />
+
+      <Route
+        path="/manage-projects"
+        element={
+          <ManageProjects />
+        }
+      />
+
+      <Route
+        path="/team-requests"
+        element={
+          <TeamRequests />
         }
       />
 
