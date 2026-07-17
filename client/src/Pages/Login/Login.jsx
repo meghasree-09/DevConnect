@@ -7,6 +7,7 @@ function Login({
   setUsers,
 }) {
   console.log(users);
+
   const navigate =
     useNavigate();
 
@@ -30,6 +31,14 @@ function Login({
     setNewPassword] =
     useState("");
 
+  const [showPassword,
+    setShowPassword] =
+    useState(false);
+
+  const [showNewPassword,
+    setShowNewPassword] =
+    useState(false);
+
   // Login
 
   const handleSubmit = (
@@ -52,7 +61,35 @@ function Login({
       );
 
       setLoggedIn(true);
-    } else {
+
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify(user)
+      );
+
+      if (
+        user.role ===
+        "admin"
+      ) {
+        navigate(
+          "/admin"
+        );
+      }
+      else if (
+        user.role ===
+        "projectLead"
+      ) {
+        navigate(
+          "/lead"
+        );
+      }
+      else {
+        navigate(
+          "/user"
+        );
+      }
+    }
+    else {
       alert(
         "Invalid Credentials"
       );
@@ -63,7 +100,6 @@ function Login({
 
   const handleForgotPassword =
     () => {
-
       if (!email) {
         alert(
           "Please enter your email first."
@@ -85,63 +121,62 @@ function Login({
         return;
       }
 
-      setShowForgot(true);
+      setShowForgot(
+        true
+      );
     };
 
   // Update Password
-const handleUpdatePassword = () => {
-  if (!email) {
-    alert(
-      "Please enter your email first."
-    );
-    return;
-  }
 
-  if (!newPassword) {
-    alert(
-      "Please enter new password."
-    );
-    return;
-  }
+  const handleUpdatePassword =
+    () => {
+      if (!newPassword) {
+        alert(
+          "Please enter new password."
+        );
+        return;
+      }
 
-  const user = users.find(
-    (u) => u.email === email
-  );
+      const updatedUsers =
+        users.map(
+          (u) =>
+            u.email ===
+            email
+              ? {
+                  ...u,
+                  password:
+                    newPassword,
+                }
+              : u
+        );
 
-  if (!user) {
-    alert(
-      "Email not registered."
-    );
-    return;
-  }
+      setUsers(
+        updatedUsers
+      );
 
-  const updatedUsers =
-    users.map((u) =>
-      u.email === email
-        ? {
-            ...u,
-            password:
-              newPassword,
-          }
-        : u
-    );
+      localStorage.setItem(
+        "users",
+        JSON.stringify(
+          updatedUsers
+        )
+      );
 
-  setUsers(updatedUsers);
+      alert(
+        "Password Updated Successfully"
+      );
 
-  alert(
-    "Password Updated Successfully"
-  );
+      setPassword(
+        newPassword
+      );
 
-  setPassword(newPassword);
+      setNewPassword(
+        ""
+      );
 
-  setShowForgot(false);
-
-  setNewPassword("");
-
-  console.log(
-    updatedUsers
-  );
-};
+      setShowForgot(
+        false
+      );
+    };
 
   return (
     <div className="login-page">
@@ -177,7 +212,11 @@ const handleUpdatePassword = () => {
           />
 
           <input
-            type="password"
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
             placeholder="Enter Password"
             value={
               password
@@ -190,6 +229,27 @@ const handleUpdatePassword = () => {
             }
             required
           />
+
+          <div className="show-password">
+            <input
+              type="checkbox"
+              id="showPassword"
+              checked={
+                showPassword
+              }
+              onChange={() =>
+                setShowPassword(
+                  !showPassword
+                )
+              }
+            />
+
+            <label
+              htmlFor="showPassword"
+            >
+              Show Password
+            </label>
+          </div>
 
           <button
             type="button"
@@ -205,7 +265,11 @@ const handleUpdatePassword = () => {
             <div className="forgot-box">
 
               <input
-                type="password"
+                type={
+                  showNewPassword
+                    ? "text"
+                    : "password"
+                }
                 placeholder="Enter New Password"
                 value={
                   newPassword
@@ -217,6 +281,27 @@ const handleUpdatePassword = () => {
                   )
                 }
               />
+
+              <div className="show-password">
+                <input
+                  type="checkbox"
+                  id="showNewPassword"
+                  checked={
+                    showNewPassword
+                  }
+                  onChange={() =>
+                    setShowNewPassword(
+                      !showNewPassword
+                    )
+                  }
+                />
+
+                <label
+                  htmlFor="showNewPassword"
+                >
+                  Show Password
+                </label>
+              </div>
 
               <button
                 type="button"
@@ -265,7 +350,6 @@ const handleUpdatePassword = () => {
             <table>
 
               <thead>
-
                 <tr>
                   <th>
                     Name
@@ -278,14 +362,19 @@ const handleUpdatePassword = () => {
                   <th>
                     Phone
                   </th>
-                </tr>
 
+                  <th>
+                    Role
+                  </th>
+                </tr>
               </thead>
 
               <tbody>
 
                 {users.map(
-                  (user) => (
+                  (
+                    user
+                  ) => (
                     <tr
                       key={
                         user.id
@@ -306,6 +395,12 @@ const handleUpdatePassword = () => {
                       <td>
                         {
                           user.phone
+                        }
+                      </td>
+
+                      <td>
+                        {
+                          user.role
                         }
                       </td>
                     </tr>
