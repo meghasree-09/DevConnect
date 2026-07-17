@@ -289,3 +289,20 @@ tbody tr:hover {
     font-size: 14px;
   }
 }
+.show-password {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.show-password input {
+  width: auto;
+  cursor: pointer;
+}
+
+.show-password label {
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
