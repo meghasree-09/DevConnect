@@ -1,0 +1,38 @@
+import express from "express";
+import userRoutes from "./routes/userRoutes.js";
+import logger from "./middleware/logger.js";
+import connectDB from "./config/db.js";
+import dotenv from "dotenv";
+dotenv.config();
+
+
+const app = express();
+
+connectDB();
+
+app.use(express.json());
+app.use(logger);
+
+// app.get("/", (req, res) => {
+//   res.send(
+//     "Welcome to DevConnect Backend"
+//   );
+// });
+
+app.use(
+  "/users",
+  userRoutes
+);
+
+
+// app.use((req, res) => {
+//   res.status(404).json({
+//     message: "Route Not Found"
+//   });
+// });
+
+app.listen(8000, () => {
+  console.log(
+    "Server is  Started at 8000"
+  );
+});
