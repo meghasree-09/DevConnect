@@ -25,6 +25,14 @@ function Register({
     setPassword] =
     useState("");
 
+  const [role,
+    setRole] =
+    useState("user");
+
+  const [showPassword,
+    setShowPassword]=
+    useState("false");
+
   const handleSubmit = (
     e
   ) => {
@@ -73,8 +81,10 @@ function Register({
     setEmail("");
     setPhone("");
     setPassword("");
+    setRole("user");
+    setShowPassword(false);
 
-    navigate("/users");
+    navigate("/login");
   };
 
   return (
@@ -133,7 +143,7 @@ function Register({
           />
 
           <input
-            type="password"
+            type={showPassword ? "text":"password"}
             placeholder="Enter Password"
             value={
               password
@@ -146,6 +156,47 @@ function Register({
             }
             required
           />
+          <div className="show-password">
+            <input
+              type="checkbox"
+              id="showPassword"
+              checked={
+                showPassword
+              }
+              onChange={() =>
+                setShowPassword(
+                  !showPassword
+                )
+              }
+            />
+             <label
+              htmlFor="showPassword"
+            >
+              Show Password
+            </label>
+          </div>
+
+
+           {/* Role Selection */}
+
+          <select
+            value={role}
+            onChange={(e) =>
+              setRole(
+                e.target.value
+              )
+            }
+            required
+          >
+            <option value="user">
+              User
+            </option>
+
+            <option value="projectLead">
+              Project Lead
+            </option>
+
+          </select>
 
           <button
             type="submit"
