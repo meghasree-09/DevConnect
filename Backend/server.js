@@ -3,10 +3,12 @@ import userRoutes from "./routes/userRoutes.js";
 import logger from "./middleware/logger.js";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
+import cors from "cors"
 dotenv.config();
 
 
 const app = express();
+app.use(cors());
 
 connectDB();
 
