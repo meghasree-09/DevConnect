@@ -77,7 +77,7 @@ function Login({
       }
       else if (
         user.role ===
-        "projectLead"
+        "lead"
       ) {
         navigate(
           "/lead"
@@ -382,7 +382,7 @@ function Login({
                     >
                       <td>
                         {
-                          user.studentName
+                          user.userName
                         }
                       </td>
 
