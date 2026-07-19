@@ -12,12 +12,19 @@ const userSchema = new mongoose.Schema({
         unique:true,
         lowercase:true
     },
+    phone:{
+        type:String,
+        required:true,
+        minlength:10,
+        maxlength:10
+    },
     role:{
         type:String,
         required:true,
         enum:["admin","user","lead"],
-        default:"user"
+        
     },
+    
     
 },{
     timestamps:true
