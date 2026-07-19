@@ -9,8 +9,8 @@ function Register({
   const navigate =
     useNavigate();
 
-  const [studentName,
-    setStudentName] =
+  const [userName,
+    setUserName] =
     useState("");
 
   const [email,
@@ -27,7 +27,7 @@ function Register({
 
   const [role,
     setRole] =
-    useState("user");
+    useState("");
 
   const [showPassword,
     setShowPassword]=
@@ -55,7 +55,7 @@ function Register({
 
     const newUser = {
       id: Date.now(),
-      studentName,
+      UserName,
       email,
       phone,
       password,
@@ -77,7 +77,7 @@ function Register({
       "Registration Successful"
     );
 
-    setStudentName("");
+    setUserName("");
     setEmail("");
     setPhone("");
     setPassword("");
@@ -105,10 +105,10 @@ function Register({
             type="text"
             placeholder="Enter Name"
             value={
-              studentName
+              userName
             }
             onChange={(e) =>
-              setStudentName(
+              setUserName(
                 e.target
                   .value
               )
