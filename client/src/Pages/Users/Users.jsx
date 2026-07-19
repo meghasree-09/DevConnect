@@ -1,96 +1,88 @@
-import './Users.css'
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import UserTable from "../../components/UserTable/UserTable";
+import api from "../../api/api"; // change path if needed
+import "./Users.css";
 
-function Users({
-  users,
-  setUsers,
-}) {
-  const navigate =
-    useNavigate();
+function Users() {
+  const [users, setUsers] =
+    useState([]);
 
-  const handleDelete = (
-    id
-  ) => {
-    const updatedUsers =
-      users.filter(
-        (user) =>
-          user.id !== id
+  const [loading, setLoading] =
+    useState(true);
+
+  async function fetchUsers() {
+    try {
+      setLoading(true);
+
+      const response =
+        await api.get("/users");
+
+      // If backend returns:
+      // res.json({ users })
+
+      setUsers(
+        response.data.users
       );
 
-    setUsers(updatedUsers);
-  };
+      console.log(
+        response.data.users
+      );
+    }
+    catch (error) {
+      console.log(error);
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteUser(id) {
+    try {
+      await api.delete(
+        `/users/${id}`
+      );
+
+      setUsers(
+        users.filter(
+          (user) =>
+            user._id !== id
+        )
+      );
+
+      alert(
+        "User Deleted Successfully"
+      );
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  if (loading) {
+    return (
+      <h2 className="loading-text">
+        Loading Users...
+      </h2>
+    );
+  }
 
   return (
-    <div className="users-page">
+    <div className="users-container">
 
-      <h1>
-        Registered Users
+      <h1 className="users-title">
+        Users
       </h1>
 
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          {users.map(
-            (user) => (
-              <tr
-                key={user.id}
-              >
-                <td>
-                  {
-                    user.studentName
-                  }
-                </td>
-
-                <td>
-                  {
-                    user.email
-                  }
-                </td>
-
-                <td>
-                  {
-                    user.phone
-                  }
-                </td>
-
-                <td>
-
-                 <button
-                    className="edit-btn"
-                    onClick={() =>
-                        navigate(`/edit/${user.id}`)
-                    }
-                    >
-                    Edit
-                </button>
-
-                  <button
-                    onClick={() =>
-                      handleDelete(
-                        user.id
-                      )
-                    }
-                  >
-                    Delete
-                  </button>
-
-                </td>
-              </tr>
-            )
-          )}
-
-        </tbody>
-
-      </table>
+      <UserTable
+        users={users}
+        deleteUser={
+          deleteUser
+        }
+      />
 
     </div>
   );
