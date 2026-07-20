@@ -1,5 +1,6 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
+import developerRoutes from "./routes/developerRoutes.js"
 import logger from "./middleware/logger.js";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
@@ -15,6 +16,7 @@ connectDB();
 app.use(express.json());
 app.use(logger);
 
+
 // app.get("/", (req, res) => {
 //   res.send(
 //     "Welcome to DevConnect Backend"
@@ -25,6 +27,8 @@ app.use(
   "/users",
   userRoutes
 );
+
+app.use("/developers",developerRoutes)
 
 
 // app.use((req, res) => {
