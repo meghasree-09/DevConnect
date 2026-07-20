@@ -60,7 +60,7 @@ function ManageProjects() {
           </div>
         )}
 
-      </div>
+       </div>
 
     </div>
   );
