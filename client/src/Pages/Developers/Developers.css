@@ -1,77 +1,147 @@
-.developers-page {
-  min-height: 100vh;
-  background: linear-gradient(
-    to right,
-    #020617,
-    #0f172a,
-    #1e293b
-  );
+/* Full Page */
 
-  color: white;
-  text-align: center;
-  padding: 80px 8%;
+.developers-page {
+    min-height: 100vh;
+    padding: 120px 8%;
+    background: linear-gradient(
+        90deg,
+        #020617,
+        #0f172a,
+        #1e293b
+    );
+    color: white;
+}
+
+/* Header Section */
+
+.developer-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.developer-header h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
 }
 
 .developer-subtitle {
-  color: lightgray;
-  margin-top: 15px;
-  margin-bottom: 50px;
+    font-size: 1.1rem;
+    color: #cbd5e1;
+    margin-bottom: 30px;
 }
+
+/* Create Developer Button */
+
+.create-developer-btn {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.create-developer-btn:hover {
+    background: #3b82f6;
+    transform: translateY(-4px);
+}
+
+/* Developers Grid */
 
 .developers-container {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(300px, 1fr)
-    );
-
-  gap: 30px;
+    display: grid;
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(300px, 1fr)
+        );
+    gap: 35px;
 }
 
+/* Developer Card */
+
 .developer-card {
-  background: rgba(
-    255,
-    255,
-    255,
-    0.08
-  );
-
-  padding: 35px;
-  border-radius: 20px;
-
-  backdrop-filter: blur(10px);
-
-  transition: 0.4s;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 35px;
+    text-align: center;
+    transition: 0.4s;
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,0.3);
 }
 
 .developer-card:hover {
-  transform: translateY(-10px);
-
-  box-shadow: 0px 10px 30px
-    rgba(37, 99, 235, 0.4);
+    transform: translateY(-10px);
 }
+
+/* Developer Image */
 
 .developer-image {
-  font-size: 70px;
-  margin-bottom: 20px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #2563eb;
+    margin-bottom: 25px;
 }
+
+/* Name */
+
+.developer-card h2 {
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+}
+
+/* Role */
 
 .developer-card p {
-  color: lightgray;
-  margin: 20px 0;
+    color: #cbd5e1;
+    margin-bottom: 25px;
+    font-size: 1rem;
 }
 
+/* View Profile Button */
+
 .developer-card button {
-  padding: 12px 25px;
-  border: none;
-  border-radius: 25px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .developer-card button:hover {
-  background: #1d4ed8;
+    background: #3b82f6;
+    transform: translateY(-3px);
+}
+
+/* Responsive */
+
+@media (max-width:768px) {
+
+    .developers-page {
+        padding: 100px 5%;
+    }
+
+    .developer-header h1 {
+        font-size: 2.3rem;
+    }
+
+    .developer-card {
+        padding: 30px;
+    }
+
+    .developer-image {
+        width: 110px;
+        height: 110px;
+    }
+
 }
