@@ -1,63 +1,161 @@
 import "./Developers.css";
 
+import {
+  useEffect,
+  useState
+} from "react";
+
+import {
+  Link
+} from "react-router-dom";
+
+import {
+  getDevelopers
+} from "../../api/developerApi";
+
 function Developers() {
+
+  const [
+    developers,
+    setDevelopers
+  ] = useState([]);
+
+  useEffect(() => {
+
+    fetchDevelopers();
+
+  }, []);
+
+  const fetchDevelopers =
+    async () => {
+
+      try {
+
+        const response =
+          await getDevelopers();
+
+        setDevelopers(
+          response.data
+        );
+
+      }
+      catch (error) {
+
+        console.log(error);
+
+      }
+
+    };
+
   return (
+
     <div className="developers-page">
 
-      <h1>Our Developers</h1>
+      <div className="developer-header">
 
-      <p className="developer-subtitle">
-        Meet talented developers from our community.
-      </p>
+        <h1>
+          Our Developers
+        </h1>
 
-      <div className="developers-container">
+        <p className="developer-subtitle">
 
-        <div className="developer-card">
-          <div className="developer-image">
-            
-          </div>
+          Meet talented developers from our community.
 
-          <h2>Meghana Sree</h2>
+        </p>
 
-          <p>Frontend Developer</p>
+        <Link
+          to="/create-developer"
+        >
 
-          <button>
-            View Profile
+          <button
+            className="create-developer-btn"
+          >
+
+            + Create Developer
+
           </button>
-        </div>
 
-        <div className="developer-card">
-          <div className="developer-image">
-            
-          </div>
+        </Link>
 
-          <h2>Alex Johnson</h2>
+      </div>
 
-          <p>Backend Developer</p>
+      <div
+        className=
+        "developers-container"
+      >
 
-          <button>
-            View Profile
-          </button>
-        </div>
+        {
+          developers.map(
+            (
+              developer
+            ) => (
 
-        <div className="developer-card">
-          <div className="developer-image">
-            
-          </div>
+              <div
+                className=
+                "developer-card"
 
-          <h2>Sarah Lee</h2>
+                key={
+                  developer._id
+                }
+              >
 
-          <p>Cloud Engineer</p>
+                <img
+                  src={
+                    developer.image ||
 
-          <button>
-            View Profile
-          </button>
-        </div>
+                    "https://dummyimage.com/200x200/2563eb/ffffff&text=Developer"
+                  }
+
+                  alt={
+                    developer.name
+                  }
+
+                  className=
+                  "developer-image"
+                />
+
+                <h2>
+                  {
+                    developer.name
+                  }
+                </h2>
+
+                <p>
+
+                  {
+                    developer.role
+                  }
+
+                </p>
+
+                <Link
+
+                  to={
+                    `/developer/${developer._id}`
+                  }
+
+                >
+
+                  <button>
+
+                    View Profile
+
+                  </button>
+
+                </Link>
+
+              </div>
+
+            )
+          )
+        }
 
       </div>
 
     </div>
+
   );
+
 }
 
 export default Developers;
