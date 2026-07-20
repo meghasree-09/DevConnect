@@ -18,7 +18,8 @@ import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
 import CreateProjects from "./Pages/Project/CreateProjects";
 import ManageProjects from "./Pages/Project/ManageProjects";
 import TeamRequests from "./Pages/Project/TeamRequests";
-
+import DeveloperProfile from "./Pages/Developers/DeveloperProfile.jsx";
+import CreateDeveloper from "./Pages/Developers/CreateDeveloper.jsx";
 function App() {
   const [users, setUsers] = useState([]);
 
@@ -57,6 +58,11 @@ function App() {
         element={<Projects />}
       />
 
+      {/* <Route
+        path="/projects/:id"
+        element={<ViewProject />}
+      /> */}
+
       <Route
         path="/communities"
         element={<Communities />}
@@ -65,6 +71,16 @@ function App() {
       <Route
         path="/developers"
         element={<Developers />}
+      />
+
+      <Route
+        path="/developer/:id"
+        element={<DeveloperProfile/>}
+      />
+
+      <Route
+        path="/create-developer"
+        element={<CreateDeveloper />}
       />
 
       <Route
@@ -120,6 +136,7 @@ function App() {
           <CreateProjects  />
         }
       />
+
 
       <Route
         path="/manage-projects"
