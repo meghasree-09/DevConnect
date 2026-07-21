@@ -1,61 +1,80 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createProject } from "../../api/projectapi";
 import "./Project.css";
 
 function CreateProjects() {
+
   const [title, setTitle] =
     useState("");
 
-  const [description,
-    setDescription] =
-    useState("");
+  const [
+    description,
+    setDescription
+  ] = useState("");
 
-  const [technology,
-    setTechnology] =
-    useState("");
+  const [
+    technology,
+    setTechnology
+  ] = useState("");
 
-  const handleSubmit = (
-    e
-  ) => {
-    e.preventDefault();
+  const navigate =
+    useNavigate();
 
-    const projects =
-      JSON.parse(
-        localStorage.getItem(
-          "projects"
-        )
-      ) || [];
+  const handleSubmit =
+    async (e) => {
 
-    const newProject = {
-      id: Date.now(),
-      title,
-      description,
-      technology,
-      members: [],
-      requests: [],
+      e.preventDefault();
+
+      try {
+
+        const newProject = {
+
+          title,
+
+          description,
+
+          technologies:
+            technology
+              .split(",")
+              .map(
+                (tech) =>
+                  tech.trim()
+              ),
+
+        };
+
+        await createProject(
+          newProject
+        );
+
+        alert(
+          "Project Created Successfully"
+        );
+
+        setTitle("");
+        setDescription("");
+        setTechnology("");
+
+        navigate(
+          "/projects"
+        );
+
+      }
+      catch (error) {
+
+        console.log(error);
+
+        alert(
+          "Failed to Create Project"
+        );
+
+      }
+
     };
 
-    const updatedProjects = [
-      ...projects,
-      newProject,
-    ];
-
-    localStorage.setItem(
-      "projects",
-      JSON.stringify(
-        updatedProjects
-      )
-    );
-
-    alert(
-      "Project Created Successfully"
-    );
-
-    setTitle("");
-    setDescription("");
-    setTechnology("");
-  };
-
   return (
+
     <div className="project-page">
 
       <div className="project-card">
@@ -69,14 +88,16 @@ function CreateProjects() {
             handleSubmit
           }
         >
+
           <input
             type="text"
             placeholder="Project Title"
             value={title}
-            onChange={(e) =>
-              setTitle(
-                e.target.value
-              )
+            onChange={
+              (e) =>
+                setTitle(
+                  e.target.value
+                )
             }
             required
           />
@@ -86,24 +107,26 @@ function CreateProjects() {
             value={
               description
             }
-            onChange={(e) =>
-              setDescription(
-                e.target.value
-              )
+            onChange={
+              (e) =>
+                setDescription(
+                  e.target.value
+                )
             }
             required
           />
 
           <input
             type="text"
-            placeholder="Technologies Used"
+            placeholder="Technologies Used (React, Node, MongoDB)"
             value={
               technology
             }
-            onChange={(e) =>
-              setTechnology(
-                e.target.value
-              )
+            onChange={
+              (e) =>
+                setTechnology(
+                  e.target.value
+                )
             }
             required
           />
@@ -119,7 +142,9 @@ function CreateProjects() {
       </div>
 
     </div>
+
   );
+
 }
 
 export default CreateProjects;
