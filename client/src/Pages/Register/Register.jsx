@@ -1,93 +1,78 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
+import api from "../../api/api";
 
-function Register({
-  users,
-  setUsers,
-}) {
-  const navigate =
-    useNavigate();
+function Register() {
 
-  const [userName,
-    setUserName] =
+  const navigate = useNavigate();
+
+  const [userName, setUserName] =
     useState("");
 
-  const [email,
-    setEmail] =
+  const [email, setEmail] =
     useState("");
 
-  const [phone,
-    setPhone] =
+  const [phone, setPhone] =
     useState("");
 
-  const [password,
-    setPassword] =
+  const [password, setPassword] =
     useState("");
 
-  const [role,
-    setRole] =
-    useState("");
+  const [role, setRole] =
+    useState("user");
 
   const [showPassword,
-    setShowPassword]=
-    useState("false");
+    setShowPassword] =
+    useState(false);
 
-  const handleSubmit = (
-    e
-  ) => {
-    e.preventDefault();
+  const handleSubmit =
+    async (e) => {
 
-    // Check duplicate email
-    const existingUser =
-      users.find(
-        (user) =>
-          user.email ===
-          email
-      );
+      e.preventDefault();
 
-    if (existingUser) {
-      alert(
-        "Email already registered"
-      );
-      return;
-    }
+      try {
 
-    const newUser = {
-      id: Date.now(),
-      UserName,
-      email,
-      phone,
-      password,
+        await api.post(
+          "/users",
+          {
+            userName,
+            email,
+            phone,
+            password,
+            role
+          }
+        );
+
+        alert(
+          "Registration Successful"
+        );
+
+        setUserName("");
+        setEmail("");
+        setPhone("");
+        setPassword("");
+        setRole("user");
+        setShowPassword(false);
+
+        navigate("/login");
+
+      }
+      catch (error) {
+
+        console.log(error);
+
+        alert(
+          error.response?.data?.message ||
+          "Registration Failed"
+        );
+
+      }
+
     };
 
-    const updatedUsers = [
-        ...users,
-        newUser,
-      ];
-
-      setUsers(updatedUsers);
-
-      localStorage.setItem(
-        "users",
-        JSON.stringify(updatedUsers)
-      );
-      
-    alert(
-      "Registration Successful"
-    );
-
-    setUserName("");
-    setEmail("");
-    setPhone("");
-    setPassword("");
-    setRole("user");
-    setShowPassword(false);
-
-    navigate("/login");
-  };
-
   return (
+
     <div className="register-page">
 
       <div className="register-container">
@@ -101,16 +86,14 @@ function Register({
             handleSubmit
           }
         >
+
           <input
             type="text"
             placeholder="Enter Name"
-            value={
-              userName
-            }
+            value={userName}
             onChange={(e) =>
               setUserName(
-                e.target
-                  .value
+                e.target.value
               )
             }
             required
@@ -122,8 +105,7 @@ function Register({
             value={email}
             onChange={(e) =>
               setEmail(
-                e.target
-                  .value
+                e.target.value
               )
             }
             required
@@ -135,28 +117,33 @@ function Register({
             value={phone}
             onChange={(e) =>
               setPhone(
-                e.target
-                  .value
+                e.target.value
               )
             }
             required
           />
 
           <input
-            type={showPassword ? "text":"password"}
-            placeholder="Enter Password"
-            value={
-              password
+            type={
+              showPassword
+                ? "text"
+                : "password"
             }
+            placeholder="Enter Password"
+            value={password}
             onChange={(e) =>
               setPassword(
-                e.target
-                  .value
+                e.target.value
               )
             }
             required
           />
-          <div className="show-password">
+
+          <div
+            className=
+            "show-password"
+          >
+
             <input
               type="checkbox"
               id="showPassword"
@@ -169,15 +156,15 @@ function Register({
                 )
               }
             />
-             <label
-              htmlFor="showPassword"
+
+            <label
+              htmlFor=
+              "showPassword"
             >
               Show Password
             </label>
+
           </div>
-
-
-           {/* Role Selection */}
 
           <select
             value={role}
@@ -188,12 +175,17 @@ function Register({
             }
             required
           >
+
             <option value="user">
               User
             </option>
 
             <option value="projectLead">
               Project Lead
+            </option>
+
+            <option value="admin">
+              Admin
             </option>
 
           </select>
@@ -203,22 +195,34 @@ function Register({
           >
             Register
           </button>
+
         </form>
 
         <p>
+
           Already have an account?
+
           <button
             type="button"
-            className="link-button"
-            onClick={() => navigate("/login")}
+            className=
+            "link-button"
+            onClick={() =>
+              navigate(
+                "/login"
+              )
+            }
           >
+
             Login
+
           </button>
+
         </p>
 
       </div>
 
     </div>
+
   );
 }
 
