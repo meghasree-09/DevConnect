@@ -1,13 +1,16 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useState,
+} from "react";
+
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import api from "../../api/api";
+
 import "./Login.css";
 
-function Login({
-  users,
-  setUsers,
-}) {
-  console.log(users);
-
+function Login() {
   const navigate =
     useNavigate();
 
@@ -19,8 +22,8 @@ function Login({
     setPassword] =
     useState("");
 
-  const [loggedIn,
-    setLoggedIn] =
+  const [showPassword,
+    setShowPassword] =
     useState(false);
 
   const [showForgot,
@@ -31,93 +34,71 @@ function Login({
     setNewPassword] =
     useState("");
 
-  const [showPassword,
-    setShowPassword] =
-    useState(false);
+  const [
+    showNewPassword,
+    setShowNewPassword,
+  ] = useState(false);
 
-  const [showNewPassword,
-    setShowNewPassword] =
-    useState(false);
+  const handleSubmit =
+    async (e) => {
+      e.preventDefault();
 
-  // Login
+      try {
+        const response =
+          await api.post(
+            "/users/login",
+            {
+              email,
+              password,
+            }
+          );
 
-  const handleSubmit = (
-    e
-  ) => {
-    e.preventDefault();
+        const user =
+          response.data;
 
-    const user =
-      users.find(
-        (u) =>
-          u.email ===
-            email &&
-          u.password ===
-            password
-      );
+        alert(
+          "Login Successful"
+        );
 
-    if (user) {
-      alert(
-        "Login Successful"
-      );
-
-      setLoggedIn(true);
-
-      localStorage.setItem(
-        "loggedInUser",
-        JSON.stringify(user)
-      );
-
-      if (
-        user.role ===
-        "admin"
-      ) {
-        navigate(
-          "/admin"
+        if (
+          user.role ===
+          "admin"
+        ) {
+          navigate(
+            "/admin"
+          );
+        }
+        else if (
+          user.role ===
+          "projectLead"
+        ) {
+          navigate(
+            "/lead"
+          );
+        }
+        else {
+          navigate(
+            "/user"
+          );
+        }
+      }
+      catch (error) {
+        alert(
+          error.response
+            ?.data
+            ?.message ||
+            "Invalid Credentials"
         );
       }
-      else if (
-        user.role ===
-        "lead"
-      ) {
-        navigate(
-          "/lead"
-        );
-      }
-      else {
-        navigate(
-          "/user"
-        );
-      }
-    }
-    else {
-      alert(
-        "Invalid Credentials"
-      );
-    }
-  };
-
-  // Forgot Password
+    };
 
   const handleForgotPassword =
     () => {
       if (!email) {
         alert(
-          "Please enter your email first."
-        );
-        return;
-      }
-
-      const user =
-        users.find(
-          (u) =>
-            u.email ===
-            email
+          "Please enter email first"
         );
 
-      if (!user) {
-        alert(
-          "Email not registered."
-        );
         return;
       }
 
@@ -126,61 +107,58 @@ function Login({
       );
     };
 
-  // Update Password
-
   const handleUpdatePassword =
-    () => {
-      if (!newPassword) {
+    async () => {
+      if (
+        !newPassword
+      ) {
         alert(
-          "Please enter new password."
+          "Enter new password"
         );
+
         return;
       }
 
-      const updatedUsers =
-        users.map(
-          (u) =>
-            u.email ===
-            email
-              ? {
-                  ...u,
-                  password:
-                    newPassword,
-                }
-              : u
+      try {
+        const response =
+          await api.put(
+            "/users/forgot-password",
+            {
+              email,
+              password:
+                newPassword,
+            }
+          );
+
+        alert(
+          response.data
+            .message
         );
 
-      setUsers(
-        updatedUsers
-      );
+        setPassword(
+          newPassword
+        );
 
-      localStorage.setItem(
-        "users",
-        JSON.stringify(
-          updatedUsers
-        )
-      );
+        setNewPassword(
+          ""
+        );
 
-      alert(
-        "Password Updated Successfully"
-      );
-
-      setPassword(
-        newPassword
-      );
-
-      setNewPassword(
-        ""
-      );
-
-      setShowForgot(
-        false
-      );
+        setShowForgot(
+          false
+        );
+      }
+      catch (error) {
+        alert(
+          error.response
+            ?.data
+            ?.message ||
+            "Something went wrong"
+        );
+      }
     };
 
   return (
     <div className="login-page">
-
       <div className="login-container">
 
         <h1>
@@ -233,7 +211,6 @@ function Login({
           <div className="show-password">
             <input
               type="checkbox"
-              id="showPassword"
               checked={
                 showPassword
               }
@@ -244,9 +221,7 @@ function Login({
               }
             />
 
-            <label
-              htmlFor="showPassword"
-            >
+            <label>
               Show Password
             </label>
           </div>
@@ -285,7 +260,6 @@ function Login({
               <div className="show-password">
                 <input
                   type="checkbox"
-                  id="showNewPassword"
                   checked={
                     showNewPassword
                   }
@@ -296,9 +270,7 @@ function Login({
                   }
                 />
 
-                <label
-                  htmlFor="showNewPassword"
-                >
+                <label>
                   Show Password
                 </label>
               </div>
@@ -340,82 +312,7 @@ function Login({
           Register Here
         </button>
 
-        {loggedIn && (
-          <div className="table-container">
-
-            <h2>
-              Registered Users
-            </h2>
-
-            <table>
-
-              <thead>
-                <tr>
-                  <th>
-                    Name
-                  </th>
-
-                  <th>
-                    Email
-                  </th>
-
-                  <th>
-                    Phone
-                  </th>
-
-                  <th>
-                    Role
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                {users.map(
-                  (
-                    user
-                  ) => (
-                    <tr
-                      key={
-                        user.id
-                      }
-                    >
-                      <td>
-                        {
-                          user.userName
-                        }
-                      </td>
-
-                      <td>
-                        {
-                          user.email
-                        }
-                      </td>
-
-                      <td>
-                        {
-                          user.phone
-                        }
-                      </td>
-
-                      <td>
-                        {
-                          user.role
-                        }
-                      </td>
-                    </tr>
-                  )
-                )}
-
-              </tbody>
-
-            </table>
-
-          </div>
-        )}
-
       </div>
-
     </div>
   );
 }
