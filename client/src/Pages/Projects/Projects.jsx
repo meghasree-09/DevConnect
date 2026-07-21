@@ -1,101 +1,155 @@
 import "./Projects.css";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getProjects } from "../../api/projectApi";
 
 function Projects() {
+
+  const [projects, setProjects] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects =
+    async () => {
+
+      try {
+
+        const data =
+          await getProjects();
+
+        setProjects(data);
+
+      }
+      catch (error) {
+
+        console.log(error);
+
+      }
+      finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+  if (loading) {
+    return (
+      <h2 className="loading">
+        Loading Projects...
+      </h2>
+    );
+  }
+
   return (
+
     <div className="projects-page">
 
-      <h1>Featured Projects</h1>
+      <h1>
+        Featured Projects
+      </h1>
 
       <p className="project-subtitle">
         Explore innovative projects built by developers.
       </p>
 
-      <div className="projects-container">
+      <div className="project-header">
 
-        <div className="project-card">
-          <h2>TravelGo</h2>
+        <Link to="/create-project">
 
-          <p>
-            Cloud-based travel booking platform
-            using Flask, AWS EC2, DynamoDB,
-            and SNS.
-          </p>
-
-          <button>
-            View Project
+          <button
+            className="add-project-btn"
+          >
+            + Add Project
           </button>
-        </div>
 
-        <div className="project-card">
-          <h2>DevConnect</h2>
-
-          <p>
-            Developer networking platform to
-            connect, collaborate and showcase
-            projects.
-          </p>
-
-          <button>
-            View Project
-          </button>
-        </div>
-
-        <div className="project-card">
-          <h2>Anonymous Chat Box</h2>
-
-          <p>
-            Institution feedback platform for
-            students using MongoDB and React.
-          </p>
-
-          <button>
-            View Project
-          </button>
-        </div>
-
-        <div className="project-card">
-          <h2>Digital Complaint Box</h2>
-
-          <p>
-            Secure complaint management system
-            for colleges and organizations.
-          </p>
-
-          <button>
-            View Project
-          </button>
-        </div>
-
-        <div className="project-card">
-          <h2>Smart Shopping Cart</h2>
-
-          <p>
-            Interactive shopping cart application
-            built using HTML, CSS and JavaScript.
-          </p>
-
-          <button>
-            View Project
-          </button>
-        </div>
-
-        <div className="project-card">
-          <h2>Portfolio Website</h2>
-
-          <p>
-            Responsive personal portfolio website
-            showcasing skills and achievements.
-          </p>
-
-          <button>
-            View Project
-          </button>
-        </div>
+        </Link>
 
       </div>
 
+      {
+        projects.length === 0 ?
+
+        (
+
+          <h2>
+            No Projects Found
+          </h2>
+
+        )
+
+        :
+
+        (
+
+          <div className="projects-container">
+
+            {
+              projects.map(
+                (project) => (
+
+                  <div
+                    key={project._id}
+                    className="project-card"
+                  >
+
+                    {
+                      project.image && (
+
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="project-image"
+                        />
+
+                      )
+                    }
+
+                    <h2>
+                      {project.title}
+                    </h2>
+
+                    <p>
+                      {project.description}
+                    </p>
+
+                    <div className="project-buttons">
+
+                      <Link
+                        to={`/projects/${project._id}`}
+                      >
+
+                        <button
+                          className="view-btn"
+                        >
+                          View Project
+                        </button>
+
+                      </Link>
+
+                    </div>
+
+                  </div>
+
+                )
+              )
+            }
+
+          </div>
+
+        )
+      }
+
     </div>
+
   );
+
 }
 
 export default Projects;
