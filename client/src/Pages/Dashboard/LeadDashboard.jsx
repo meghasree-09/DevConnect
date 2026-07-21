@@ -86,7 +86,7 @@ function LeadDashboard() {
             type="button"
             onClick={() =>
               handleNavigation(
-                "/manage-projects"
+                "/projects"
               )
             }
           >
