@@ -1,6 +1,8 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 import developerRoutes from "./routes/developerRoutes.js"
+import teamRequestRoutes from "./routes/teamRequestRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 import logger from "./middleware/logger.js";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
@@ -29,6 +31,13 @@ app.use(
 );
 
 app.use("/developers",developerRoutes)
+
+app.use(
+  "/teamrequests",
+  teamRequestRoutes
+);
+
+app.use("/projects", projectRoutes);
 
 
 // app.use((req, res) => {
