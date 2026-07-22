@@ -1,66 +1,87 @@
 import { useEffect, useState } from "react";
 import UserTable from "../../components/UserTable/UserTable";
-import api from "../../api/api"; // change path if needed
+import api from "../../api/api";
 import "./Users.css";
 
 function Users() {
-  const [users, setUsers] =
-    useState([]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  async function fetchUsers() {
+  const fetchUsers = async () => {
     try {
       setLoading(true);
 
       const response =
         await api.get("/users");
 
-      // If backend returns:
-      // res.json({ users })
-
-      setUsers(
-        response.data.users
+      console.log(
+        "Users Data : ",
+        response.data
       );
 
-      console.log(
-        response.data.users
+      setUsers(
+        Array.isArray(
+          response.data
+        )
+          ? response.data
+          : []
       );
     }
     catch (error) {
-      console.log(error);
+      console.log(
+        "Fetch Error : ",
+        error
+      );
     }
     finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function deleteUser(id) {
-    try {
-      await api.delete(
-        `/users/${id}`
-      );
+  const deleteUser =
+    async (id) => {
+      try {
+        console.log(
+          "Deleting User : ",
+          id
+        );
 
-      setUsers(
-        users.filter(
-          (user) =>
-            user._id !== id
-        )
-      );
+        await api.delete(
+          `/users/${id}`
+        );
 
-      alert(
-        "User Deleted Successfully"
-      );
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
+        setUsers(
+          (prevUsers) =>
+            prevUsers.filter(
+              (user) =>
+                user._id !== id
+            )
+        );
+
+        alert(
+          "User Deleted Successfully"
+        );
+      }
+      catch (error) {
+        console.log(
+          "Delete Error : ",
+          error
+        );
+
+        alert(
+          "Failed to delete user"
+        );
+      }
+    };
 
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  console.log(
+    "Users State : ",
+    users
+  );
 
   if (loading) {
     return (
