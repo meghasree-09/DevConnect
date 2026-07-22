@@ -15,29 +15,28 @@ function Projects() {
     fetchProjects();
   }, []);
 
-  const fetchProjects =
-    async () => {
+const fetchProjects = async () => {
+  try {
 
-      try {
+    const data =
+      await getProjects();
 
-        const data =
-          await getProjects();
+    console.log(data);
 
-        setProjects(data);
+    setProjects(data);
 
-      }
-      catch (error) {
+  }
+  catch (error) {
 
-        console.log(error);
+    console.log(error);
 
-      }
-      finally {
+  }
+  finally {
 
-        setLoading(false);
+    setLoading(false);
 
-      }
-
-    };
+  }
+};
 
   if (loading) {
     return (
