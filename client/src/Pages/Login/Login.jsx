@@ -9,10 +9,13 @@ import {
 import api from "../../api/api";
 
 import "./Login.css";
+import { useAuth } from "../../context/AuthContext";
 
 function Login() {
   const navigate =
     useNavigate();
+
+  const {setUser,}=useAuth();
 
   const [email,
     setEmail] =
@@ -55,6 +58,11 @@ function Login() {
 
         const user =
           response.data;
+
+        setUser(user);
+
+        console.log("Logged User:",user);
+
 
         alert(
           "Login Successful"
