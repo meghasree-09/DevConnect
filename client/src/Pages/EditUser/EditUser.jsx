@@ -48,7 +48,7 @@ function EditUser() {
       );
 
       const userData =
-        response.data.user;
+        response.data;
 
       setUser(userData);
 
