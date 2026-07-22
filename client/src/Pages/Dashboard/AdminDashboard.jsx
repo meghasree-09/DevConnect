@@ -1,27 +1,82 @@
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  useAuth,
+} from "../../context/AuthContext";
+
+import api from "../../api/api";
+
 import "./Dashboard.css";
 
 function AdminDashboard() {
-  const navigate = useNavigate();
 
-  const users =
-    JSON.parse(
-      localStorage.getItem(
-        "users"
-      )
-    ) || [];
+  const navigate =
+    useNavigate();
 
-  const admin =
-    JSON.parse(
-      localStorage.getItem(
-        "loggedInUser"
-      )
-    );
+  const {
+    user: admin,
+    setUser,
+  } = useAuth();
+
+  const [
+    users,
+    setUsers,
+  ] = useState([]);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  useEffect(() => {
+
+    fetchUsers();
+
+  }, []);
+
+  const fetchUsers =
+    async () => {
+
+      try {
+
+        const response =
+          await api.get(
+            "/users"
+          );
+
+        setUsers(
+          response.data
+        );
+
+      }
+      catch (error) {
+
+        console.log(
+          error
+        );
+
+      }
+      finally {
+
+        setLoading(
+          false
+        );
+
+      }
+    };
 
   const totalUsers =
     users.filter(
       (u) =>
-        u.role === "user"
+        u.role ===
+        "user"
     ).length;
 
   const totalLeads =
@@ -33,14 +88,25 @@ function AdminDashboard() {
 
   const handleLogout =
     () => {
-      localStorage.removeItem(
-        "loggedInUser"
-      );
 
-      navigate("/login");
+      setUser(null);
+
+      navigate(
+        "/login"
+      );
     };
 
+  if (loading) {
+
+    return (
+      <h2>
+        Loading...
+      </h2>
+    );
+  }
+
   return (
+
     <div className="dashboard-page">
 
       <div className="dashboard-card">
@@ -48,11 +114,13 @@ function AdminDashboard() {
         <div className="dashboard-header">
 
           <div>
+
             <h1>
               Welcome,
               {" "}
               {
-                admin?.studentName
+                admin
+                  ?.studentName
               }
             </h1>
 
@@ -71,6 +139,7 @@ function AdminDashboard() {
                 admin?.role
               }
             </p>
+
           </div>
 
           <button
@@ -84,9 +153,11 @@ function AdminDashboard() {
 
         </div>
 
-        {/* Stats */}
+        {/* Statistics */}
 
-        <div className="dashboard-grid">
+        <div
+          className="dashboard-grid"
+        >
 
           <div
             className="dashboard-box"
@@ -132,7 +203,7 @@ function AdminDashboard() {
 
         </div>
 
-        {/* Actions */}
+        {/* Navigation */}
 
         <div
           className="dashboard-grid"
@@ -145,7 +216,11 @@ function AdminDashboard() {
           <button
             type="button"
             className="dashboard-box"
-            onClick={() => navigate("/users")}
+            onClick={() =>
+              navigate(
+                "/users"
+              )
+            }
           >
             <h2>
               Manage Users
@@ -160,7 +235,11 @@ function AdminDashboard() {
           <button
             type="button"
             className="dashboard-box"
-            onClick={() => navigate("/projects")}
+            onClick={() =>
+              navigate(
+                "/projects"
+              )
+            }
           >
             <h2>
               Manage Projects
@@ -175,7 +254,11 @@ function AdminDashboard() {
           <button
             type="button"
             className="dashboard-box"
-            onClick={() => navigate("/communities")}
+            onClick={() =>
+              navigate(
+                "/communities"
+              )
+            }
           >
             <h2>
               Communities
@@ -188,9 +271,12 @@ function AdminDashboard() {
           </button>
 
           <button
+            type="button"
             className="dashboard-box"
             onClick={() =>
-              navigate("/developers")
+              navigate(
+                "/developers"
+              )
             }
           >
             <h2>
@@ -210,6 +296,7 @@ function AdminDashboard() {
         <div
           className="table-container"
         >
+
           <h2>
             Registered Users
           </h2>
@@ -217,7 +304,9 @@ function AdminDashboard() {
           <table>
 
             <thead>
+
               <tr>
+
                 <th>
                   Name
                 </th>
@@ -233,44 +322,55 @@ function AdminDashboard() {
                 <th>
                   Role
                 </th>
+
               </tr>
+
             </thead>
 
             <tbody>
 
-              {users.map(
-                (user) => (
-                  <tr
-                    key={
-                      user.id
-                    }
-                  >
-                    <td>
-                      {
-                        user.studentName
-                      }
-                    </td>
+              {
+                users.map(
+                  (
+                    user
+                  ) => (
 
-                    <td>
-                      {
-                        user.email
+                    <tr
+                      key={
+                        user._id
                       }
-                    </td>
+                    >
 
-                    <td>
-                      {
-                        user.phone
-                      }
-                    </td>
+                      <td>
+                        {
+                          user
+                            .studentName
+                        }
+                      </td>
 
-                    <td>
-                      {
-                        user.role
-                      }
-                    </td>
-                  </tr>
+                      <td>
+                        {
+                          user.email
+                        }
+                      </td>
+
+                      <td>
+                        {
+                          user.phone
+                        }
+                      </td>
+
+                      <td>
+                        {
+                          user.role
+                        }
+                      </td>
+
+                    </tr>
+
+                  )
                 )
-              )}
+              }
 
             </tbody>
 
@@ -281,7 +381,9 @@ function AdminDashboard() {
       </div>
 
     </div>
+
   );
 }
 
-export default AdminDashboard;
+export default
+  AdminDashboard;
