@@ -1,17 +1,18 @@
 import "./ViewProject.css";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+
 import {
   Link,
-  useLocation,
-  useParams
+  useParams,
 } from "react-router-dom";
 
 import {
-  getProject
+  getProject,
 } from "../../api/projectApi";
 
 import {
-  createTeamRequest
+  createTeamRequest,
 } from "../../api/teamRequestApi";
 
 function ViewProject() {
@@ -19,26 +20,22 @@ function ViewProject() {
   const { id } =
     useParams();
 
-  const location =
-    useLocation();
-
-  const user =
-    location.state?.user;
+  const {
+    user,
+  } = useAuth();
 
   const [
     project,
-    setProject
+    setProject,
   ] = useState(null);
 
   const [
     loading,
-    setLoading
+    setLoading,
   ] = useState(true);
 
   useEffect(() => {
-
     fetchProject();
-
   }, [id]);
 
   const fetchProject =
@@ -48,6 +45,11 @@ function ViewProject() {
 
         const data =
           await getProject(id);
+
+        console.log(
+          "Project : ",
+          data
+        );
 
         setProject(data);
 
@@ -62,13 +64,22 @@ function ViewProject() {
         setLoading(false);
 
       }
-
     };
 
   const handleRequest =
     async () => {
 
       try {
+
+        console.log(
+          "Logged User : ",
+          user
+        );
+
+        console.log(
+          "Project : ",
+          project
+        );
 
         if (!user) {
 
@@ -77,7 +88,6 @@ function ViewProject() {
           );
 
           return;
-
         }
 
         await createTeamRequest({
@@ -85,7 +95,7 @@ function ViewProject() {
           projectId:
             project._id,
 
-          requestedBy:
+          userId:
             user._id,
 
         });
@@ -104,11 +114,11 @@ function ViewProject() {
         console.log(error);
 
         alert(
+          error.response?.data?.message ||
           "Failed to send request"
         );
 
       }
-
     };
 
   if (loading) {
@@ -118,7 +128,6 @@ function ViewProject() {
         Loading...
       </h2>
     );
-
   }
 
   if (!project) {
@@ -128,7 +137,6 @@ function ViewProject() {
         Project Not Found
       </h2>
     );
-
   }
 
   return (
@@ -192,7 +200,6 @@ function ViewProject() {
     </div>
 
   );
-
 }
 
 export default ViewProject;
