@@ -2,11 +2,12 @@ import { Link } from "react-router-dom";
 import "./UserTable.css";
 
 function UserTable({
-  users,
+  users = [],
   deleteUser,
 }) {
   return (
     <div className="table-container">
+
       <table className="user-table">
 
         <thead>
@@ -22,18 +23,22 @@ function UserTable({
 
         <tbody>
 
-          {users.length === 0 ? (
+          {!users || users.length === 0 ? (
+
             <tr>
               <td
-                colSpan="5"
+                colSpan="6"
                 className="no-users"
               >
                 No Users Registered
               </td>
             </tr>
+
           ) : (
+
             users.map(
               (user, index) => (
+
                 <tr key={user._id}>
 
                   <td>
@@ -69,7 +74,7 @@ function UserTable({
                       className="delete-btn"
                       onClick={() =>
                         deleteUser(
-                          user.id
+                          user._id
                         )
                       }
                     >
@@ -79,13 +84,16 @@ function UserTable({
                   </td>
 
                 </tr>
+
               )
             )
+
           )}
 
         </tbody>
 
       </table>
+
     </div>
   );
 }
