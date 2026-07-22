@@ -1,99 +1,284 @@
 import "./Communities.css";
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  getCommunities,
+  joinCommunity,
+  createCommunity,
+} from "../../api/communityApi";
+
+import {
+  useAuth,
+} from "../../context/AuthContext";
 
 function Communities() {
+
+  const { user } =
+    useAuth();
+
+  const [
+    communities,
+    setCommunities,
+  ] = useState([]);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  const [
+    name,
+    setName,
+  ] = useState("");
+
+  const [
+    description,
+    setDescription,
+  ] = useState("");
+
+  useEffect(() => {
+    fetchCommunities();
+  }, []);
+
+  const fetchCommunities =
+    async () => {
+
+      try {
+
+        const data =
+          await getCommunities();
+
+        setCommunities(
+          data
+        );
+
+      }
+      catch (error) {
+
+        console.log(error);
+
+      }
+      finally {
+
+        setLoading(false);
+
+      }
+    };
+
+  const handleAddCommunity =
+    async (e) => {
+
+      e.preventDefault();
+
+    console.log(
+      name,
+      description);
+
+      try {
+
+        await createCommunity({
+
+          name,
+          description,
+
+        });
+
+        alert(
+          "Community Added Successfully"
+        );
+
+        setName("");
+        setDescription("");
+
+        fetchCommunities();
+
+      }
+      catch (error) {
+
+        console.log(error.response?.data);
+        alert(error.response?.data?.message)
+
+      }
+    };
+
+  const handleJoin =
+    async (
+      communityId
+    ) => {
+
+      if (!user) {
+
+        alert(
+          "Please Login First"
+        );
+
+        return;
+      }
+
+      try {
+
+        await joinCommunity({
+
+          communityId,
+          userId:
+            user._id,
+
+        });
+
+        alert(
+          "Joined Successfully"
+        );
+
+        fetchCommunities();
+
+      }
+      catch (error) {
+
+        console.log(error);
+
+        alert(
+          error.response
+            ?.data
+            ?.message ||
+          "Failed To Join"
+        );
+
+      }
+    };
+
+  if (loading) {
+
+    return (
+      <h2>
+        Loading...
+      </h2>
+    );
+  }
+
   return (
+
     <div className="communities-page">
 
-      <h1>Developer Communities</h1>
+      <h1>
+        Developer Communities
+      </h1>
 
       <p className="community-subtitle">
         Join communities, learn together,
         and collaborate with developers.
       </p>
 
+      {/* Add Community */}
+
+      <form
+        className="community-form"
+        onSubmit={
+          handleAddCommunity
+        }
+      >
+
+        <input
+          type="text"
+          placeholder="Community Name"
+          value={name}
+          onChange={(e)=>
+            setName(
+              e.target.value
+            )
+          }
+        />
+
+        <textarea
+          placeholder="Description"
+          value={description}
+          onChange={(e)=>
+            setDescription(
+              e.target.value
+            )
+          }
+        />
+
+        <button
+          type="submit"
+        >
+          Add Community
+        </button>
+
+      </form>
+
       <div className="community-container">
 
-        <div className="community-card">
-          <h2>Frontend Developers</h2>
+        {
+          communities.length === 0
+          ? (
 
-          <p>
-            Discuss HTML, CSS, JavaScript,
-            React, UI/UX and frontend trends.
-          </p>
+            <h2>
+              No Communities Found
+            </h2>
 
-          <button>
-            Join Community
-          </button>
-        </div>
+          )
+          : (
 
-        <div className="community-card">
-          <h2>Backend Developers</h2>
+            communities.map(
+              (
+                community
+              ) => (
 
-          <p>
-            Learn Node.js, Express, APIs,
-            databases and server-side development.
-          </p>
+                <div
+                  key={
+                    community._id
+                  }
+                  className="community-card"
+                >
 
-          <button>
-            Join Community
-          </button>
-        </div>
+                  <h2>
+                    {
+                      community.name
+                    }
+                  </h2>
 
-        <div className="community-card">
-          <h2>Python Developers</h2>
+                  <p>
+                    {
+                      community.description
+                    }
+                  </p>
 
-          <p>
-            Share Python projects, Flask,
-            Django and automation ideas.
-          </p>
+                  <p>
 
-          <button>
-            Join Community
-          </button>
-        </div>
+                    Members :
+                    {
+                      community
+                        .members
+                        ?.length || 0
+                    }
 
-        <div className="community-card">
-          <h2>Cloud & AWS</h2>
+                  </p>
 
-          <p>
-            Explore AWS, DevOps, Docker,
-            Kubernetes and cloud technologies.
-          </p>
+                  <button
+                    onClick={() =>
+                      handleJoin(
+                        community._id
+                      )
+                    }
+                  >
+                    Join Community
+                  </button>
 
-          <button>
-            Join Community
-          </button>
-        </div>
+                </div>
 
-        <div className="community-card">
-          <h2>Machine Learning</h2>
+              )
+            )
 
-          <p>
-            Discuss AI, ML models,
-            data science and generative AI.
-          </p>
-
-          <button>
-            Join Community
-          </button>
-        </div>
-
-        <div className="community-card">
-          <h2>Open Source</h2>
-
-          <p>
-            Contribute to open-source projects
-            and collaborate globally.
-          </p>
-
-          <button>
-            Join Community
-          </button>
-        </div>
+          )
+        }
 
       </div>
 
     </div>
+
   );
 }
 
