@@ -5,6 +5,7 @@ import teamRequestRoutes from "./routes/teamRequestRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import logger from "./middleware/logger.js";
 import connectDB from "./config/db.js";
+import communityRoutes from "./routes/communityRoutes.js"
 import dotenv from "dotenv";
 import cors from "cors"
 dotenv.config();
@@ -36,6 +37,8 @@ app.use(
   "/teamrequests",
   teamRequestRoutes
 );
+
+app.use("/communities",communityRoutes);
 
 app.use("/projects", projectRoutes);
 
