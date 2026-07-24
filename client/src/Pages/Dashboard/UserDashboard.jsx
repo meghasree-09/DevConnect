@@ -1,19 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
+import {useAuth} from "../../context/AuthContext"
 
 function UserDashboard() {
+  const {user}=useAuth();
   const navigate = useNavigate();
 
-  const user = JSON.parse(
-    localStorage.getItem(
-      "loggedInUser"
-    )
-  );
 
   const handleLogout = () => {
-    localStorage.removeItem(
-      "loggedInUser"
-    );
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
 
     navigate("/login");
   };
@@ -29,7 +25,7 @@ function UserDashboard() {
             <h1>
               Welcome,
               {" "}
-              {user?.studentName}
+              {user?.userName}
             </h1>
 
             <p>
@@ -57,6 +53,16 @@ function UserDashboard() {
         </div>
 
         <div className="dashboard-grid">
+
+          <button
+            type="button"
+            className="dashboard-box"
+            onClick={() => navigate("/my-tasks")}
+          >
+            <h2>My Tasks</h2>
+
+            <p>View and update your assigned tasks.</p>
+          </button>
 
           <button
             type="button"
