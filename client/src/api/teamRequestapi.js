@@ -1,26 +1,30 @@
 import api from "./api";
 
-export const createTeamRequest =
-  async (data) => {
+// Create Team Request
+export const createTeamRequest = async (data) => {
+  const response = await api.post("/teamrequests", data);
+  return response.data;
+};
 
-    const response =
-      await api.post(
-        "/teamrequests",
-        data
-      );
+// Get All Team Requests
+export const getTeamRequests = async (userId) => {
 
-    return response.data;
+  const response = await api.get(
+    `/teamrequests/${userId}`
+  );
+
+  return response.data;
 
 };
 
-export const getTeamRequests =
-  async () => {
+// Update Request Status
+export const updateTeamRequest = async (id, status) => {
 
-    const response =
-      await api.get(
-        "/teamrequests"
-      );
+  const response = await api.put(
+    `/teamrequests/${id}`,
+    { status }
+  );
 
-    return response.data;
+  return response.data;
 
 };
