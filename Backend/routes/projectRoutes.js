@@ -1,5 +1,5 @@
 import express from "express";
-
+import { protect } from "../middleware/authMiddleware.js";
 import {
   getProjects,
   getProjectById,
@@ -13,27 +13,27 @@ const router =
   express.Router();
 
 router.get(
-  "/",
+  "/",protect,
   getProjects
 );
 
 router.get(
-  "/:id",
+  "/:id",protect,
   getProjectById
 );
 
 router.post(
-  "/",
+  "/",protect,
   createProject
 );
 
 router.put(
-  "/:id",
+  "/:id",protect,
   updateProject
 );
 
 router.delete(
-  "/:id",
+  "/:id",protect,
   deleteProject
 );
 
