@@ -15,7 +15,7 @@ function Login() {
   const navigate =
     useNavigate();
 
-  const {setUser,}=useAuth();
+  const {login}=useAuth();
 
   const [email,
     setEmail] =
@@ -42,63 +42,42 @@ function Login() {
     setShowNewPassword,
   ] = useState(false);
 
-  const handleSubmit =
-    async (e) => {
-      e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      try {
-        const response =
-          await api.post(
-            "/users/login",
-            {
-              email,
-              password,
-            }
-          );
+  try {
+    const response = await api.post("/users/login", {
+      email,
+      password,
+    });
 
-        const user =
-          response.data;
+    const { token, user } = response.data;
 
-        setUser(user);
+    // Save JWT
+    localStorage.setItem("token", token);
 
-        console.log("Logged User:",user);
+    // Save user details
+    localStorage.setItem("user", JSON.stringify(user));
 
+    // Update AuthContext
+    login(user);
 
-        alert(
-          "Login Successful"
-        );
+    alert("Login Successful");
 
-        if (
-          user.role ===
-          "admin"
-        ) {
-          navigate(
-            "/admin"
-          );
-        }
-        else if (
-          user.role ===
-          "projectLead"
-        ) {
-          navigate(
-            "/lead"
-          );
-        }
-        else {
-          navigate(
-            "/user"
-          );
-        }
-      }
-      catch (error) {
-        alert(
-          error.response
-            ?.data
-            ?.message ||
-            "Invalid Credentials"
-        );
-      }
-    };
+    if (user.role === "admin") {
+      navigate("/admin");
+    } else if (user.role === "projectLead") {
+      navigate("/lead");
+    } else {
+      navigate("/user");
+    }
+  } catch (error) {
+    alert(
+      error.response?.data?.message ||
+      "Invalid Credentials"
+    );
+  }
+};
 
   const handleForgotPassword =
     () => {
