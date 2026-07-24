@@ -249,3 +249,21 @@
     width: 95%;
   }
 }
+.joined-btn {
+  margin: 30px auto;
+  display: block;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 25px;
+  background: #16a34a;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.joined-btn:hover {
+  background: #15803d;
+  transform: translateY(-2px);
+}
