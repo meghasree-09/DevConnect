@@ -14,11 +14,14 @@ import {
   useAuth,
 } from "../../context/AuthContext";
 
+import { useNavigate } from "react-router-dom";
+
 function Communities() {
 
   const { user } =
     useAuth();
 
+   const navigate = useNavigate();
   const [
     communities,
     setCommunities,
@@ -129,15 +132,17 @@ function Communities() {
         });
 
         alert(
-          "Joined Successfully"
+          "Joined Successfully",
         );
+        navigate(`/community/${communityId}`)
 
         fetchCommunities();
 
       }
       catch (error) {
 
-        console.log(error);
+        console.log("Status:", error.response?.status);
+        console.log("Data:", error.response?.status);
 
         alert(
           error.response
@@ -208,6 +213,15 @@ function Communities() {
         </button>
 
       </form>
+      
+      <button
+        className="joined-btn"
+        onClick={() =>
+          navigate("/joined-communities")
+        }
+      >
+        View Joined Communities
+      </button>
 
       <div className="community-container">
 
