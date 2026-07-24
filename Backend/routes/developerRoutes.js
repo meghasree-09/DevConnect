@@ -1,10 +1,10 @@
 import express from "express";
-
+import { protect } from "../middleware/authMiddleware.js";
 import {
 
 getDevelopers,
 getDeveloperById,
-createDeveloper
+createDeveloper,deleteDeveloper
 
 }
 from
@@ -24,8 +24,8 @@ router.get(
 );
 
 router.post(
-    "/",
+    "/",protect,
     createDeveloper
 );
-
+router.delete("/:id", deleteDeveloper);
 export default router;
