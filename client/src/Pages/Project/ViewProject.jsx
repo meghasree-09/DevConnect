@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 
 import {
   Link,
-  useParams,
+  useParams,useNavigate
 } from "react-router-dom";
 
 import {
@@ -19,7 +19,7 @@ function ViewProject() {
 
   const { id } =
     useParams();
-
+  const navigate=useNavigate();
   const {
     user,
   } = useAuth();
@@ -138,6 +138,13 @@ function ViewProject() {
       </h2>
     );
   }
+  const isTeamMember = project?.teamMembers?.some(
+  (member) =>
+    member.user?._id?.toString() === user?._id?.toString()
+);
+
+const isProjectLead =
+  project?.createdBy?._id?.toString() === user?._id?.toString();
 
   return (
 
@@ -157,36 +164,74 @@ function ViewProject() {
           Technologies Used
         </h3>
 
-        <div className="tech-container">
+       <div className="tech-container">
 
-          {
-            project.technologies?.map(
-              (
-                tech,
-                index
-              ) => (
+    {
+      project.technologies?.map(
+        (tech, index) => (
 
-                <span
-                  key={index}
-                  className="tech-badge"
-                >
-                  {tech}
-                </span>
+          <span
+            key={index}
+            className="tech-badge"
+          >
+            {tech}
+          </span>
 
-              )
-            )
-          }
+        )
+      )
+    }
+
+  </div>
+
+  <h3>Team Members</h3>
+
+  <div className="team-members">
+
+    {project.teamMembers?.length === 0 ? (
+
+      <p>No members yet.</p>
+
+    ) : (
+
+      project.teamMembers.map((member) => (
+
+        <div
+          key={member._id}
+          className="member-card"
+        >
+      <h4>{member.user.userName}</h4>
+
+      <p>{member.user.email}</p>
+
+      <p>
+        <strong>Role:</strong> {member.role}
+      </p>
 
         </div>
 
-        <button
-          className="request-btn"
-          onClick={
-            handleRequest
-          }
-        >
-          Request To Join Team
-        </button>
+      ))
+
+    )}
+
+  </div>
+
+
+
+       {isProjectLead || isTeamMember ? (
+  <button
+    className="request-btn"
+    onClick={() => navigate(`/chat/${project._id}`)}
+  >
+    Open Project Chat
+  </button>
+) : (
+  <button
+    className="request-btn"
+    onClick={handleRequest}
+  >
+    Request To Join Team
+  </button>
+)}
 
         <Link
           to="/projects"
