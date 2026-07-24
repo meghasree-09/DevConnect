@@ -2,74 +2,43 @@ import Project from "../models/Project.js";
 
 
 // GET ALL PROJECTS
-export const getProjects =
-  async (req, res) => {
+export const getProjects = async (req, res) => {
+  try {
+    const projects = await Project.find().populate("createdBy");
 
-    try {
+    res.status(200).json(projects);
+  } catch (error) {
+    console.log(error);
 
-      const projects =
-        await Project.find();
-
-      res.status(200)
-        .json(projects);
-
-    }
-    catch (error) {
-
-      console.log(error);
-
-      res.status(500)
-        .json({
-          message:
-            error.message,
-        });
-
-    }
-
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 
 // GET SINGLE PROJECT
-export const getProjectById =
-  async (req, res) => {
+export const getProjectById = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id)
+      .populate("createdBy")
+      .populate("teamMembers.user");
 
-    try {
-
-      const project =
-        await Project.findById(
-          req.params.id
-        );
-
-      if (!project) {
-
-        return res
-          .status(404)
-          .json({
-            message:
-              "Project Not Found",
-          });
-
-      }
-
-      res.status(200)
-        .json(project);
-
-    }
-    catch (error) {
-
-      console.log(error);
-
-      res.status(500)
-        .json({
-          message:
-            error.message,
-        });
-
+    if (!project) {
+      return res.status(404).json({
+        message: "Project Not Found",
+      });
     }
 
+    res.status(200).json(project);
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
-
-
 // CREATE PROJECT
 export const createProject =
   async (req, res) => {
