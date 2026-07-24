@@ -1,33 +1,22 @@
 import User from "../models/users.js";
-
+import jwt from "jsonwebtoken";
 // GET ALL USERS
-export const getUsers =
-  async (req, res) => {
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find().select(
+      "_id userName email phone role"
+    );
 
-    try {
+    res.status(200).json(users);
 
-      const users =
-        await User.find();
+  } catch (error) {
+    console.log(error);
 
-      res.status(200)
-        .json(users);
-
-    }
-    catch (error) {
-
-      console.log(error);
-
-      res.status(500)
-        .json({
-          message:
-            error.message,
-        });
-
-    }
-
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
-
-
 export const getUserById =
   async (req, res) => {
 
@@ -95,62 +84,51 @@ export const addUser =
 };
 
 // LOGIN USER
-export const loginUser =
-  async (req, res) => {
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-    try {
+    const user = await User.findOne({ email });
 
-      const {
-        email,
-        password,
-      } = req.body;
-
-      const user =
-        await User.findOne({
-          email,
-        });
-
-      if (!user) {
-
-        return res
-          .status(404)
-          .json({
-            message:
-              "User not found",
-          });
-
-      }
-
-      if (
-        user.password !==
-        password
-      ) {
-
-        return res
-          .status(400)
-          .json({
-            message:
-              "Invalid Password",
-          });
-
-      }
-
-      res.status(200)
-        .json(user);
-
-    }
-    catch (error) {
-
-      console.log(error);
-
-      res.status(500)
-        .json({
-          message:
-            error.message,
-        });
-
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
 
+    if (user.password !== password) {
+      return res.status(400).json({
+        message: "Invalid Password",
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.status(200).json({
+      token,
+      user: {
+        _id: user._id,
+        userName: user.userName,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 export const updateUser =
