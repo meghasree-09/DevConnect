@@ -83,3 +83,22 @@ async(req,res)=>{
     }
 
 };
+export const deleteDeveloper = async (req, res) => {
+  try {
+    const developer = await Developer.findByIdAndDelete(req.params.id);
+
+    if (!developer) {
+      return res.status(404).json({
+        message: "Developer not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Developer deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
