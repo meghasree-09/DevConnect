@@ -1,0 +1,44 @@
+.community-tabs{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin:30px auto;
+    padding:10px;
+}
+
+.community-tabs button{
+    border:none;
+    outline:none;
+    padding:12px 22px;
+    border-radius:30px;
+    background:white;
+    color:#1e293b;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+.community-tabs button:hover{
+    transform:translateY(-3px);
+}
+
+.community-tabs .active{
+    background:#2563eb;
+    color:white;
+}
+
+@media(max-width:768px){
+
+.community-tabs{
+gap:10px;
+}
+
+.community-tabs button{
+width:160px;
+}
+
+}

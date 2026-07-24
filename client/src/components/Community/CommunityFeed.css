@@ -1,0 +1,213 @@
+/* ===========================
+   Community Feed
+=========================== */
+
+.community-feed{
+    width:100%;
+    max-width:950px;
+    margin:40px auto;
+    padding:0 20px;
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+
+/* ===========================
+   Create Post Card
+=========================== */
+
+.create-post{
+    background:#1e293b;
+    border-radius:22px;
+    padding:25px;
+    box-shadow:0 15px 35px rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.05);
+    animation:fadeUp .5s ease;
+}
+
+.create-post textarea{
+    width:100%;
+    min-height:170px;
+    resize:none;
+    border:none;
+    outline:none;
+    background:#0f172a;
+    color:#fff;
+    border-radius:18px;
+    padding:20px;
+    font-size:16px;
+    line-height:1.7;
+    transition:.3s;
+}
+
+.create-post textarea::placeholder{
+    color:#94a3b8;
+}
+
+.create-post textarea:focus{
+    box-shadow:0 0 0 2px #2563eb;
+}
+
+.create-post button{
+    margin-top:20px;
+    float:right;
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:white;
+    border:none;
+    padding:14px 35px;
+    border-radius:14px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.create-post button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 25px rgba(37,99,235,.35);
+}
+
+/* ===========================
+   Posts Section
+=========================== */
+
+.posts{
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+}
+
+/* ===========================
+   Empty State
+=========================== */
+
+.no-posts{
+    background:#1e293b;
+    border-radius:20px;
+    padding:70px 30px;
+    text-align:center;
+    border:1px dashed rgba(255,255,255,.08);
+}
+
+.no-posts h2{
+    color:white;
+    font-size:34px;
+    margin-bottom:12px;
+}
+
+.no-posts p{
+    color:#94a3b8;
+    font-size:18px;
+}
+
+/* ===========================
+   Scrollbar
+=========================== */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#0f172a;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#475569;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#64748b;
+}
+
+/* ===========================
+   Animations
+=========================== */
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media(max-width:992px){
+
+.community-feed{
+    padding:0 18px;
+}
+
+.create-post{
+    padding:20px;
+}
+
+}
+
+@media(max-width:768px){
+
+.community-feed{
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.create-post{
+    padding:18px;
+}
+
+.create-post textarea{
+    min-height:140px;
+    font-size:15px;
+    padding:16px;
+}
+
+.create-post button{
+    width:100%;
+    float:none;
+    margin-top:18px;
+}
+
+.no-posts{
+    padding:50px 20px;
+}
+
+.no-posts h2{
+    font-size:28px;
+}
+
+.no-posts p{
+    font-size:16px;
+}
+
+}
+
+@media(max-width:480px){
+
+.community-feed{
+    padding:0 10px;
+}
+
+.create-post{
+    border-radius:16px;
+}
+
+.create-post textarea{
+    border-radius:12px;
+}
+
+.no-posts{
+    border-radius:16px;
+}
+
+}
