@@ -1,20 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./Dashboard.css";
 
 function LeadDashboard() {
   const navigate = useNavigate();
 
-  const user = JSON.parse(
-    localStorage.getItem(
-      "loggedInUser"
-    )
-  );
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem(
-      "loggedInUser"
-    );
-
+    logout();
     navigate("/login");
   };
 
@@ -24,124 +18,69 @@ function LeadDashboard() {
 
   return (
     <div className="dashboard-page">
-
       <div className="dashboard-card">
-
         <div className="dashboard-header">
-
           <div>
-            <h1>
-              Welcome,
-              {" "}
-              {user?.studentName}
-            </h1>
+            <h1>Welcome, {user?.userName}</h1>
 
-            <p>
-              Email :
-              {" "}
-              {user?.email}
-            </p>
+            <p>Email : {user?.email}</p>
 
-            <p>
-              Role :
-              {" "}
-              {user?.role}
-            </p>
+            <p>Role : {user?.role}</p>
           </div>
 
           <button
             className="logout-btn"
-            onClick={
-              handleLogout
-            }
+            onClick={handleLogout}
           >
             Logout
           </button>
-
         </div>
 
         <div className="dashboard-grid">
 
           <button
             className="dashboard-box"
-            type="button"
-            onClick={() =>
-              handleNavigation(
-                "/create-project"
-              )
-            }
+            onClick={() => handleNavigation("/create-project")}
           >
-            <h2>
-              Create Project
-            </h2>
+            <h2>Create Project</h2>
 
-            <p>
-              Create new projects
-              and recruit members.
-            </p>
+            <p>Create a new project.</p>
           </button>
 
           <button
             className="dashboard-box"
-            type="button"
-            onClick={() =>
-              handleNavigation(
-                "/projects"
-              )
-            }
+            onClick={() => handleNavigation("/manage-projects")}
           >
-            <h2>
-              Manage Projects
-            </h2>
+            <h2>Manage Projects</h2>
 
-            <p>
-              View and manage
-              your projects.
-            </p>
+            <p>Edit or delete your projects.</p>
           </button>
 
           <button
             className="dashboard-box"
-            type="button"
-            onClick={() =>
-              handleNavigation(
-                "/team-requests"
-              )
-            }
+            onClick={() => handleNavigation("/team-requests")}
           >
-            <h2>
-              Team Requests
-            </h2>
+            <h2>Team Requests</h2>
 
-            <p>
-              Accept or reject
-              join requests.
-            </p>
+            <p>Accept or reject requests.</p>
           </button>
 
           <button
             className="dashboard-box"
-            type="button"
-            onClick={() =>
-              handleNavigation(
-                "/developers"
-              )
-            }
+            onClick={() => handleNavigation("/developers")}
           >
-            <h2>
-              Developers
-            </h2>
+            <h2>Developers</h2>
 
-            <p>
-              Connect with other
-              developers.
-            </p>
+            <p>View developer profiles.</p>
           </button>
+
+         
+
+    
+
 
         </div>
-
       </div>
-
     </div>
   );
 }
