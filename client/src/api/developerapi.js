@@ -1,21 +1,12 @@
-import axios from "axios";
+import api from "./api";
 
-const API =
-axios.create({
+export const getDevelopers = () =>
+  api.get("/developers");
 
-baseURL:
-"http://localhost:8000/developers"
+export const getDeveloper = (id) =>
+  api.get(`/developers/${id}`);
 
-});
-
-export const getDevelopers =
-()=>
-API.get("/");
-
-export const getDeveloper =
-(id)=>
-API.get(`/${id}`);
-
-export const createDeveloper =
-(data)=>
-API.post("/",data);
+export const createDeveloper = (data) =>
+  api.post("/developers", data);
+export const deleteDeveloper = (id) =>
+  api.delete(`/developers/${id}`);
