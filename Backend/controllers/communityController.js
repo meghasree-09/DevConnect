@@ -1,168 +1,208 @@
-import Community
-from "../models/Community.js";
+import Community from "../models/Community.js";
 
 /* ===========================
    Get All Communities
 =========================== */
 
-export const getCommunities =
-  async (req, res) => {
+export const getCommunities = async (req, res) => {
+  try {
 
-    try {
+    const communities = await Community.find()
+      .populate("createdBy", "studentName")
+      .populate("members", "studentName email role");
 
-      const communities =
-        await Community.find();
+    res.status(200).json(communities);
 
-      res.status(200)
-        .json(
-          communities
-        );
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+};
+
+/* ===========================
+   Get Community By Id
+=========================== */
+
+export const getCommunityById = async (req, res) => {
+
+  try {
+
+    const community = await Community.findById(req.params.id)
+      .populate("createdBy", "studentName email role")
+      .populate("members", "studentName email role");
+
+    if (!community) {
+
+      return res.status(404).json({
+        message: "Community Not Found",
+      });
 
     }
-    catch (error) {
 
-      console.log(error);
+    res.status(200).json(community);
 
-      res.status(500)
-        .json({
-          message:
-            error.message,
-        });
+  } catch (error) {
 
-    }
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
 };
 
 /* ===========================
    Create Community
 =========================== */
 
-export const createCommunity =
-  async (req, res) => {
+export const createCommunity = async (req, res) => {
 
-    try {
+  try {
 
-      console.log(
-        "Request Body : ",
-        req.body
-      );
+    const {
+      name,
+      description,
+      category,
+      image,
+      technologies,
+      rules,
+      createdBy,
+    } = req.body;
 
-      const {
-        name,
-        description,
-      } = req.body;
+    if (!name || !description || !category) {
 
-      if (
-        !name ||
-        !description
-      ) {
-        return res
-          .status(400)
-          .json({
-            message:
-              "Name and Description are required",
-          });
-      }
-
-      const community =
-        await Community.create({
-          name,
-          description,
-          members: [],
-        });
-
-      res.status(201)
-        .json(
-          community
-        );
+      return res.status(400).json({
+        message: "Please fill all required fields.",
+      });
 
     }
-    catch (error) {
 
-      console.log(
-        "Community Error : ",
-        error
-      );
+    const community = await Community.create({
 
-      res.status(500)
-        .json({
-          message:
-            error.message,
-        });
+      name,
+      description,
+      category,
 
-    }
+      image: image || "",
+
+      technologies: technologies || [],
+
+      rules: rules || [],
+
+      createdBy,
+
+      members: [],
+
+    });
+
+    res.status(201).json(community);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
 };
 
 /* ===========================
    Join Community
 =========================== */
 
-export const joinCommunity =
-  async (req, res) => {
+export const joinCommunity = async (req, res) => {
 
-    try {
+  try {
 
-      const {
-        communityId,
-        userId,
-      } = req.body;
+    const {
+      communityId,
+      userId,
+    } = req.body;
 
-      const community =
-        await Community.findById(
-          communityId
-        );
+    if (!communityId || !userId) {
 
-      if (
-        !community
-      ) {
-        return res
-          .status(404)
-          .json({
-            message:
-              "Community Not Found",
-          });
-      }
-
-      const alreadyJoined =
-        community.members.some(
-          (member) =>
-            member.toString() ===
-            userId
-        );
-
-      if (
-        alreadyJoined
-      ) {
-        return res
-          .status(400)
-          .json({
-            message:
-              "Already Joined",
-          });
-      }
-
-      community.members.push(
-        userId
-      );
-
-      await community.save();
-
-      res.status(200)
-        .json({
-          message:
-            "Joined Successfully",
-          community,
-        });
+      return res.status(400).json({
+        message: "Community ID and User ID are required.",
+      });
 
     }
-    catch (error) {
 
-      console.log(error);
+    const community = await Community.findById(communityId);
 
-      res.status(500)
-        .json({
-          message:
-            error.message,
-        });
+    if (!community) {
+
+      return res.status(404).json({
+        message: "Community Not Found",
+      });
 
     }
+
+    const alreadyJoined = community.members.some(
+      (member) => member.toString() === userId
+    );
+
+    if (alreadyJoined) {
+
+      return res.status(400).json({
+        message: "Already Joined",
+      });
+
+    }
+
+    community.members.push(userId);
+
+    await community.save();
+
+    res.status(200).json({
+
+      message: "Joined Successfully",
+
+      community,
+
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
+};
+export const updateCommunity = async (req, res) => {
+  try {
+
+    const updatedCommunity = await Community.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedCommunity) {
+      return res.status(404).json({
+        message: "Community not found",
+      });
+    }
+
+    res.status(200).json(updatedCommunity);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message,
+    });
+
+  }
 };
