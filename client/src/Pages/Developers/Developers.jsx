@@ -10,8 +10,9 @@ import {
 } from "react-router-dom";
 
 import {
-  getDevelopers
-} from "../../api/developerApi";
+  getDevelopers,
+  deleteDeveloper
+} from "../../api/developerapi";
 
 function Developers() {
 
@@ -46,6 +47,26 @@ function Developers() {
       }
 
     };
+    const handleDelete = async (id) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this developer?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await deleteDeveloper(id);
+
+    alert("Developer deleted successfully");
+
+    fetchDevelopers(); // Refresh developer list
+  } catch (error) {
+    alert(
+      error.response?.data?.message ||
+      "Delete failed"
+    );
+  }
+};
 
   return (
 
@@ -141,6 +162,12 @@ function Developers() {
                     View Profile
 
                   </button>
+                  <button
+  className="delete-btn"
+  onClick={() => handleDelete(developer._id)}
+>
+  Delete
+</button>
 
                 </Link>
 
