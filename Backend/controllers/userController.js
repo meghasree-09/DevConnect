@@ -122,6 +122,8 @@ export const loginUser = async (req, res) => {
         role: user.role,
       },
     });
+
+    
   } catch (error) {
     console.log(error);
 
