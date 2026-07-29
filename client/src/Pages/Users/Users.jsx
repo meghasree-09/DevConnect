@@ -6,6 +6,8 @@ import "./Users.css";
 function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage=5;
 
   const fetchUsers = async () => {
     try {
@@ -77,6 +79,29 @@ function Users() {
   useEffect(() => {
     fetchUsers();
   }, []);
+  const indexOfLastUser = currentPage * usersPerPage;
+const indexOfFirstUser = indexOfLastUser - usersPerPage;
+
+const currentUsers = users.slice(
+  indexOfFirstUser,
+  indexOfLastUser
+);
+
+const totalPages = Math.ceil(
+  users.length / usersPerPage
+);
+
+const nextPage = () => {
+  if (currentPage < totalPages) {
+    setCurrentPage(currentPage + 1);
+  }
+};
+
+const previousPage = () => {
+  if (currentPage > 1) {
+    setCurrentPage(currentPage - 1);
+  }
+};
 
   console.log(
     "Users State : ",
@@ -98,12 +123,32 @@ function Users() {
         Users
       </h1>
 
-      <UserTable
-        users={users}
-        deleteUser={
-          deleteUser
-        }
-      />
+     <UserTable
+      users={currentUsers}
+      deleteUser={deleteUser}
+    />
+
+    <div className="pagination">
+
+  <button
+    onClick={previousPage}
+    disabled={currentPage === 1}
+  >
+     Previous
+  </button>
+
+  <span>
+    Page {currentPage} of {totalPages}
+  </span>
+
+  <button
+    onClick={nextPage}
+    disabled={currentPage === totalPages}
+  >
+    Next 
+  </button>
+
+</div>
 
     </div>
   );
