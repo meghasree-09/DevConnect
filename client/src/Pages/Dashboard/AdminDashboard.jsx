@@ -1,389 +1,265 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  useNavigate,
-} from "react-router-dom";
-
-import {
-  useAuth,
-} from "../../context/AuthContext";
-
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import api from "../../api/api";
+import { useAuth } from "../../context/AuthContext";
 
-import "./Dashboard.css";
+import {
+  FaUsers,
+  FaProjectDiagram,
+  FaUserTie,
+  FaUsersCog,
+} from "react-icons/fa";
 
-function AdminDashboard() {
+import "./AdminDashboard.css";
 
-  const navigate =
-    useNavigate();
+const AdminDashboard = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const {
-    user: admin,
-    setUser,
-  } = useAuth();
+  const [loading, setLoading] = useState(true);
 
-  const [
-    users,
-    setUsers,
-  ] = useState([]);
-
-  const [
-    loading,
-    setLoading,
-  ] = useState(true);
+  const [users, setUsers] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [developers, setDevelopers] = useState([]);
+  const [communities, setCommunities] = useState([]);
 
   useEffect(() => {
-
-    fetchUsers();
-
+    loadDashboard();
   }, []);
 
-  const fetchUsers =
-    async () => {
+  const loadDashboard = async () => {
+    try {
+      const [
+        usersRes,
+        projectsRes,
+        developersRes,
+        communitiesRes,
+      ] = await Promise.all([
+        api.get("/users"),
+        api.get("/projects"),
+        api.get("/developers"),
+        api.get("/communities"),
+      ]);
 
-      try {
-
-        const response =
-          await api.get(
-            "/users"
-          );
-
-        setUsers(
-          response.data
-        );
-
-      }
-      catch (error) {
-
-        console.log(
-          error
-        );
-
-      }
-      finally {
-
-        setLoading(
-          false
-        );
-
-      }
-    };
-
-  const totalUsers =
-    users.filter(
-      (u) =>
-        u.role ===
-        "user"
-    ).length;
-
-  const totalLeads =
-    users.filter(
-      (u) =>
-        u.role ===
-        "projectLead"
-    ).length;
-
-  const handleLogout =
-    () => {
-
-      setUser(null);
-
-      navigate(
-        "/login"
-      );
-    };
+      setUsers(usersRes.data || []);
+      setProjects(projectsRes.data || []);
+      setDevelopers(developersRes.data || []);
+      setCommunities(communitiesRes.data || []);
+    } catch (error) {
+      console.error("Dashboard Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
-
     return (
-      <h2>
-        Loading...
-      </h2>
+      <div className="loading-container">
+        <div className="loader"></div>
+        <h2>Loading Dashboard...</h2>
+      </div>
     );
   }
 
   return (
+    <DashboardLayout
+      role="admin"
+      user={user}
+      onLogout={logout}
+    >
+      {/* Welcome */}
 
-    <div className="dashboard-page">
+      <section className="welcome-section">
 
-      <div className="dashboard-card">
+        <div>
 
-        <div className="dashboard-header">
+          <h1>
+            Welcome back, {user?.userName || user?.name} 👋
+          </h1>
+
+          <p>
+            Here's what's happening in DevConnect today.
+          </p>
+
+        </div>
+
+      </section>
+
+      {/* Statistics */}
+
+      <section className="stats-grid">
+
+        <div className="stat-card blue">
+
+          <div className="stat-icon">
+            <FaUsers />
+          </div>
 
           <div>
 
-            <h1>
-              Welcome,
-              {" "}
-              {
-                admin
-                  ?.studentName
-              }
-            </h1>
+            <h2>{users.length}</h2>
 
-            <p>
-              Email :
-              {" "}
-              {
-                admin?.email
-              }
-            </p>
+            <p>Total Users</p>
 
-            <p>
-              Role :
-              {" "}
-              {
-                admin?.role
-              }
-            </p>
-
-          </div>
-
-          <button
-            className="logout-btn"
-            onClick={
-              handleLogout
-            }
-          >
-            Logout
-          </button>
-
-        </div>
-
-        {/* Statistics */}
-
-        <div
-          className="dashboard-grid"
-        >
-
-          <div
-            className="dashboard-box"
-          >
-            <h2>
-              Users
-            </h2>
-
-            <h1>
-              {
-                totalUsers
-              }
-            </h1>
-          </div>
-
-          <div
-            className="dashboard-box"
-          >
-            <h2>
-              Project Leads
-            </h2>
-
-            <h1>
-              {
-                totalLeads
-              }
-            </h1>
-          </div>
-
-          <div
-            className="dashboard-box"
-          >
-            <h2>
-              Total Members
-            </h2>
-
-            <h1>
-              {
-                users.length
-              }
-            </h1>
           </div>
 
         </div>
 
-        {/* Navigation */}
+        <div className="stat-card green">
 
-        <div
-          className="dashboard-grid"
-          style={{
-            marginTop:
-              "40px",
-          }}
-        >
+          <div className="stat-icon">
+            <FaProjectDiagram />
+          </div>
 
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() =>
-              navigate(
-                "/users"
-              )
-            }
-          >
-            <h2>
-              Manage Users
-            </h2>
+          <div>
 
-            <p>
-              View, edit and
-              delete users.
-            </p>
-          </button>
+            <h2>{projects.length}</h2>
 
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() =>
-              navigate(
-                "/projects"
-              )
-            }
-          >
-            <h2>
-              Manage Projects
-            </h2>
+            <p>Projects</p>
 
-            <p>
-              Monitor all
-              projects.
-            </p>
-          </button>
-
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() =>
-              navigate(
-                "/communities"
-              )
-            }
-          >
-            <h2>
-              Communities
-            </h2>
-
-            <p>
-              Manage community
-              activities.
-            </p>
-          </button>
-
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() =>
-              navigate(
-                "/developers"
-              )
-            }
-          >
-            <h2>
-              Developers
-            </h2>
-
-            <p>
-              View all
-              developers.
-            </p>
-          </button>
+          </div>
 
         </div>
 
-        {/* Users Table */}
+        <div className="stat-card orange">
 
-        <div
-          className="table-container"
-        >
+          <div className="stat-icon">
+            <FaUserTie />
+          </div>
 
-          <h2>
-            Registered Users
-          </h2>
+          <div>
 
-          <table>
+            <h2>{developers.length}</h2>
 
-            <thead>
+            <p>Developers</p>
 
-              <tr>
+          </div>
 
-                <th>
-                  Name
-                </th>
+        </div>
 
-                <th>
-                  Email
-                </th>
+        <div className="stat-card purple">
 
-                <th>
-                  Phone
-                </th>
+          <div className="stat-icon">
+            <FaUsersCog />
+          </div>
 
-                <th>
-                  Role
-                </th>
+          <div>
 
-              </tr>
+            <h2>{communities.length}</h2>
 
-            </thead>
+            <p>Communities</p>
 
-            <tbody>
+          </div>
 
-              {
-                users.map(
-                  (
-                    user
-                  ) => (
+        </div>
 
-                    <tr
-                      key={
-                        user._id
-                      }
-                    >
+      </section>
 
+      {/* Recent Users */}
+
+      <section className="dashboard-section">
+
+        <div className="table-card">
+
+          <div className="table-header">
+
+            <h2>Recent Users</h2>
+
+            <button
+              className="view-all-btn"
+              onClick={() => navigate("/users")}
+            >
+              View All ({users.length})
+            </button>
+
+          </div>
+
+          <div className="table-wrapper">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+                                {users.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" style={{ textAlign: "center" }}>
+                      No users found.
+                    </td>
+                  </tr>
+                ) : (
+                  users.slice(0, 6).map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.userName || item.name}</td>
+                      <td>{item.email}</td>
                       <td>
-                        {
-                          user
-                            .studentName
-                        }
+                        <span className={`role ${item.role}`}>
+                          {item.role}
+                        </span>
                       </td>
-
-                      <td>
-                        {
-                          user.email
-                        }
-                      </td>
-
-                      <td>
-                        {
-                          user.phone
-                        }
-                      </td>
-
-                      <td>
-                        {
-                          user.role
-                        }
-                      </td>
-
                     </tr>
+                  ))
+                )}
 
-                  )
-                )
-              }
+              </tbody>
 
-            </tbody>
+            </table>
 
-          </table>
+          </div>
 
         </div>
 
-      </div>
+      </section>
 
-    </div>
+      {/* Recent Activity */}
 
+      <section className="dashboard-section">
+
+        <div className="activity-card">
+
+          <h2>Recent Activity</h2>
+
+          <div className="activity-list">
+
+            <div className="activity-item">
+              <div className="dot blue"></div>
+              <p>New user registered.</p>
+            </div>
+
+            <div className="activity-item">
+              <div className="dot green"></div>
+              <p>Project submitted successfully.</p>
+            </div>
+
+            <div className="activity-item">
+              <div className="dot orange"></div>
+              <p>Community created.</p>
+            </div>
+
+            <div className="activity-item">
+              <div className="dot purple"></div>
+              <p>Developer profile updated.</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </DashboardLayout>
   );
-}
+};
 
-export default
-  AdminDashboard;
+export default AdminDashboard;
