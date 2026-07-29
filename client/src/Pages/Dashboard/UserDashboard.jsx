@@ -1,120 +1,359 @@
-import { useNavigate } from "react-router-dom";
-import "./Dashboard.css";
-import {useAuth} from "../../context/AuthContext"
+import React, { useEffect, useState } from "react";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import api from "../../api/api";
+import { useAuth } from "../../context/AuthContext";
 
-function UserDashboard() {
-  const {user}=useAuth();
-  const navigate = useNavigate();
+import {
+  FaProjectDiagram,
+  FaUsers,
+  FaBookmark,
+  FaBell,
+} from "react-icons/fa";
 
+import "./UserDashboard.css";
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+const UserDashboard = () => {
 
-    navigate("/login");
+  const { user, logout } = useAuth();
+
+  const [loading, setLoading] = useState(true);
+
+  const [projects, setProjects] = useState([]);
+
+  const [communities, setCommunities] = useState([]);
+
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if (user?._id) {
+      loadDashboard();
+    }
+  }, [user]);
+
+  const loadDashboard = async () => {
+    try {
+      if (!user?._id) {
+        console.log("User not found");
+        setLoading(false);
+        return;
+      }
+
+      const [projectRes, communityRes, notificationRes] = await Promise.all([
+        api.get("/projects"),
+        api.get("/communities"),
+        api.get(`/notifications/${user._id}`),
+      ]);
+
+      setProjects(projectRes.data || []);
+      setCommunities(communityRes.data || []);
+      setNotifications(notificationRes.data || []);
+    } catch (err) {
+      console.log("Dashboard Error:", err.response?.data || err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loader"></div>
+        <h2>Loading Dashboard...</h2>
+      </div>
+    );
+  }
+
   return (
-    <div className="dashboard-page">
 
-      <div className="dashboard-card">
+    <DashboardLayout
 
-        <div className="dashboard-header">
+      role="user"
 
-          <div>
-            <h1>
-              Welcome,
-              {" "}
-              {user?.userName}
-            </h1>
+      user={user}
 
-            <p>
-              Email:
-              {" "}
-              {user?.email}
-            </p>
+      onLogout={logout}
 
-            <p>
-              Role:
-              {" "}
-              {user?.role}
-            </p>
+    >
+
+      <section className="welcome-section">
+
+        <h1>
+          Welcome back, {user?.userName} 👋
+        </h1>
+
+        <p>
+
+          Explore projects, join communities and grow your skills.
+
+        </p>
+
+      </section>
+
+      <section className="stats-grid">
+
+        <div className="stat-card blue">
+
+          <div className="stat-icon">
+
+            <FaProjectDiagram />
+
           </div>
 
-          <button
-            className="logout-btn"
-            onClick={
-              handleLogout
-            }
-          >
-            Logout
-          </button>
+          <div>
+
+            <h2>{projects.length}</h2>
+
+            <p>Projects</p>
+
+          </div>
 
         </div>
 
-        <div className="dashboard-grid">
+        <div className="stat-card green">
 
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() => navigate("/my-tasks")}
-          >
-            <h2>My Tasks</h2>
+          <div className="stat-icon">
 
-            <p>View and update your assigned tasks.</p>
-          </button>
+            <FaUsers />
 
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() => navigate("/communities")}
-          >
-            <h2>
-              Communities
-            </h2>
+          </div>
 
-            <p>
-              Join and explore
-              developer communities.
-            </p>
-          </button>
+          <div>
 
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() => navigate("/projects")}
-          >
-            <h2>Projects</h2>
+            <h2>{communities.length}</h2>
 
-            <p>Explore and contribute to projects.</p>
-          </button>
+            <p>Communities</p>
 
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() => navigate("/developers")}
-          >
-            <h2>Developers</h2>
-
-            <p>Connect with other developers.</p>
-          </button>
-
-          <button
-            type="button"
-            className="dashboard-box"
-            onClick={() => navigate("/contact")}
-          >
-            <h2>Contact</h2>
-
-            <p>Reach out to the DevConnect team.</p>
-          </button>
+          </div>
 
         </div>
 
-      </div>
+        <div className="stat-card orange">
 
-    </div>
+          <div className="stat-icon">
+
+            <FaBookmark />
+
+          </div>
+
+          <div>
+
+            <h2>8</h2>
+
+            <p>Saved Projects</p>
+
+          </div>
+
+        </div>
+
+        <div className="stat-card purple">
+
+          <div className="stat-icon">
+
+            <FaBell />
+
+          </div>
+
+          <div>
+
+            <h2>{notifications.length}</h2>
+
+            <p>Notifications</p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+            {/* Recommended Projects */}
+
+      <section className="dashboard-section">
+
+        <div className="table-card">
+
+          <div className="table-header">
+
+            <h2>Recommended Projects</h2>
+
+            <span>{projects.length} Projects</span>
+
+          </div>
+
+          <div className="table-wrapper">
+
+            <table>
+
+              <thead>
+
+                <tr>
+                  <th>Project</th>
+                  <th>Tech Stack</th>
+                  <th>Status</th>
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {projects.slice(0, 6).map((project) => (
+
+                  <tr key={project._id}>
+
+                    <td>{project.title}</td>
+
+                    <td>{project.techStack || "MERN"}</td>
+
+                    <td>
+                      <span className="status active">
+                        {project.status || "Open"}
+                      </span>
+                    </td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* Joined Communities */}
+
+      <section className="dashboard-section">
+
+        <div className="activity-card">
+
+          <h2>Joined Communities</h2>
+
+          <div className="activity-list">
+
+            {communities.slice(0, 5).map((community) => (
+
+              <div
+                key={community._id}
+                className="activity-item"
+              >
+
+                <div className="dot blue"></div>
+
+                <p>{community.name}</p>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* Skill Progress */}
+
+      <section className="dashboard-section">
+
+        <div className="activity-card">
+
+          <h2>Skill Progress</h2>
+
+          <div className="progress-item">
+
+            <p>React</p>
+
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: "85%" }}
+              ></div>
+            </div>
+
+          </div>
+
+          <div className="progress-item">
+
+            <p>Node.js</p>
+
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: "70%" }}
+              ></div>
+            </div>
+
+          </div>
+
+          <div className="progress-item">
+
+            <p>MongoDB</p>
+
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: "65%" }}
+              ></div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* Notifications */}
+
+      <section className="dashboard-section">
+
+        <div className="activity-card">
+
+          <h2>Notifications</h2>
+
+          <div className="activity-list">
+
+            {notifications.length === 0 ? (
+
+              <div className="activity-item">
+
+                <div className="dot green"></div>
+
+                <p>No new notifications.</p>
+
+              </div>
+
+            ) : (
+
+              notifications.slice(0, 5).map((notification) => (
+
+                <div
+                  key={notification._id}
+                  className="activity-item"
+                >
+
+                  <div className="dot orange"></div>
+
+                  <p>{notification.message}</p>
+
+                </div>
+
+              ))
+
+            )}
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </DashboardLayout>
+
   );
-}
+
+};
 
 export default UserDashboard;
