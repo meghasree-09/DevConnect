@@ -16,20 +16,30 @@ export const createNotification = async (req, res) => {
 // Get Notifications of Logged-in User
 export const getUserNotifications = async (req, res) => {
   try {
+    console.log("==================================");
+    console.log("Notification API Called");
+    console.log("User ID:", req.params.userId);
+
     const notifications = await Notification.find({
       receiver: req.params.userId,
     })
       .populate("sender", "userName email")
+      .populate("receiver", "userName email")
       .sort({ createdAt: -1 });
 
+    console.log("Notifications:", notifications);
+
     res.status(200).json(notifications);
+
   } catch (error) {
+    console.error("Notification Error:");
+    console.error(error);
+
     res.status(500).json({
       message: error.message,
     });
   }
 };
-
 // Mark Notification as Read
 export const markAsRead = async (req, res) => {
   try {
