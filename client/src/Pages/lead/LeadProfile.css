@@ -1,0 +1,188 @@
+.lead-profile {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px;
+}
+
+.lead-card {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(37,99,235,.25);
+}
+
+.lead-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lead-avatar svg {
+  font-size: 80px;
+}
+
+.lead-details h2 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.lead-details p {
+  margin: 8px 0 20px;
+}
+
+.lead-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.lead-info span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lead-stats {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 20px;
+}
+
+.lead-stat {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+
+.lead-stat svg {
+  font-size: 34px;
+  color: #2563eb;
+}
+
+.lead-stat h2 {
+  margin: 15px 0;
+}
+
+.lead-section {
+  margin-top: 30px;
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.skill-chip {
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.project-list {
+  display: grid;
+  gap: 18px;
+}
+
+.project-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.project-card h4 {
+  margin: 0 0 10px;
+}
+
+.project-card p {
+  color: #64748b;
+}
+
+.project-card span {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.social-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.social-links a {
+  text-decoration: none;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.lead-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+.edit-btn,
+.password-btn {
+  border: none;
+  padding: 14px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.edit-btn {
+  background: #2563eb;
+}
+
+.password-btn {
+  background: #475569;
+}
+
+.edit-btn:hover {
+  background: #1d4ed8;
+}
+
+.password-btn:hover {
+  background: #334155;
+}
+
+@media (max-width:768px) {
+
+  .lead-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .lead-info {
+    justify-content: center;
+  }
+
+  .lead-actions {
+    flex-direction: column;
+  }
+
+}
