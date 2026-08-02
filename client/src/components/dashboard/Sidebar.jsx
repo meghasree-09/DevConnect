@@ -17,27 +17,29 @@ const Sidebar = ({ role, isOpen, toggleSidebar, onLogout }) => {
   const navigate = useNavigate();
 
   const adminMenu = [
-    { title: "Dashboard", icon: <FaTachometerAlt />, path: "/admin-dashboard" },
-    { title: "Users", icon: <FaUsers />, path: "/manage-users" },
+    { title: "Dashboard", icon: <FaTachometerAlt />, path: "/admin" },
+    { title: "Users", icon: <FaUsers />, path: "/users" },
     { title: "Projects", icon: <FaProjectDiagram />, path: "/manage-projects" },
     { title: "Communities", icon: <FaUserFriends />, path: "/communities" },
     { title: "Developers", icon: <FaCode />, path: "/developers" },
+     { title: "Profile", icon: <FaUserTie />, path: "/admin/profile" },
   ];
 
   const leadMenu = [
-    { title: "Dashboard", icon: <FaTachometerAlt />, path: "/lead-dashboard" },
+    { title: "Dashboard", icon: <FaTachometerAlt />, path: "/lead" },
     { title: "Create Project", icon: <FaProjectDiagram />, path: "/create-project" },
-    { title: "Manage Projects", icon: <FaProjectDiagram />, path: "/projects" },
+    { title: "Manage Projects", icon: <FaProjectDiagram />, path: "/manage-projects" },
     { title: "Team Requests", icon: <FaUsers />, path: "/team-requests" },
     { title: "Developers", icon: <FaCode />, path: "/developers" },
+     { title: "Profile", icon: <FaUserTie />, path: "/lead/profile" },
   ];
 
   const userMenu = [
-    { title: "Dashboard", icon: <FaTachometerAlt />, path: "/user-dashboard" },
+    { title: "Dashboard", icon: <FaTachometerAlt />, path: "/user" },
     { title: "Projects", icon: <FaProjectDiagram />, path: "/projects" },
     { title: "Communities", icon: <FaUserFriends />, path: "/communities" },
     { title: "Developers", icon: <FaCode />, path: "/developers" },
-    { title: "Profile", icon: <FaUserTie />, path: "/profile" },
+    { title: "Profile", icon: <FaUserTie />, path: "/user/profile" },
   ];
 
   let menuItems = [];
