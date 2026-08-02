@@ -43,10 +43,15 @@ const LeadProfile = () => {
           api.get(`/teamrequests/${user._id}`),
         ]);
 
-      const myProjects =
-        (projectRes.data || []).filter(
-          (project) => project.createdBy === user._id
-        );
+    const myProjects = (projectRes.data || []).filter((project) => {
+  if (!project.createdBy) return false;
+
+  if (typeof project.createdBy === "object") {
+    return project.createdBy._id === user._id;
+  }
+
+  return project.createdBy === user._id;
+});
 
       setProjects(myProjects);
 
