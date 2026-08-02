@@ -65,7 +65,7 @@ const LeadDashboard = () => {
       onLogout={logout}
     >
       <section className="welcome-section">
-        <h1>Welcome, {user?.name} 👋</h1>
+        <h1>Welcome, {user?.userName} 👋</h1>
         <p>Manage your projects and your development team.</p>
       </section>
 
