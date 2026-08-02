@@ -9,6 +9,8 @@ import CommunityDetails from "./Pages/Communities/CommunityDetails";
 import UserProfile from "./Pages/Users/UserProfile";
 import Developers from "./Pages/Developers/Developers";
 import DeveloperProfile from "./Pages/Developers/DeveloperProfile";
+import AdminProfile from "./Pages/admin/AdminProfile";
+import LeadProfile from "./Pages/lead/LeadProfile";
 import CreateDeveloper from "./Pages/Developers/CreateDeveloper";
 
 import Contact from "./Pages/Contact/Contact";
@@ -89,6 +91,33 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+  path="/user/profile"
+  element={
+    <ProtectedRoute role="user">
+      <UserProfile />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/lead/profile"
+  element={
+    <ProtectedRoute role="projectLead">
+      <LeadProfile />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/profile"
+  element={
+    <ProtectedRoute role="admin">
+      <AdminProfile />
+    </ProtectedRoute>
+  }
+/>
 
       {/* Projects */}
 
