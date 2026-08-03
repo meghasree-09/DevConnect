@@ -28,9 +28,10 @@ const DashboardLayout = ({
 
       <div className="dashboard-main">
 
-        <Topbar
-          user={user}
-        />
+       <Topbar
+  user={user}
+  onLogout={onLogout}
+/>
 
         <main className="dashboard-content">
 
