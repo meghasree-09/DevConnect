@@ -1,0 +1,74 @@
+.notification-menu{
+  position:absolute;
+  top:65px;
+  right:0;
+  width:340px;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  z-index:999;
+  overflow:hidden;
+}
+
+.notification-header{
+  padding:15px;
+  background:#2563eb;
+  color:#fff;
+}
+
+.notification-header h3{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0;
+}
+
+.notification-list{
+  max-height:380px;
+  overflow-y:auto;
+}
+
+.notification-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  padding:15px;
+  border-bottom:1px solid #eee;
+}
+
+.notification-item:hover{
+  background:#f8fafc;
+}
+
+.notification-item.unread{
+  background:#eef4ff;
+}
+
+.notification-item.read{
+  opacity:.7;
+}
+
+.notification-item p{
+  margin:0;
+  font-size:14px;
+  font-weight:500;
+}
+
+.notification-item small{
+  color:#777;
+}
+
+.mark-btn{
+  border:none;
+  background:none;
+  color:#2563eb;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.empty-message{
+  padding:25px;
+  text-align:center;
+  color:#777;
+}
