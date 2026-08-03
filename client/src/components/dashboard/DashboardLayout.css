@@ -9,6 +9,8 @@
     margin-left:270px;
     padding:25px;
     transition:.35s;
+
+    overflow: visible;
 }
 
 .dashboard-content{
