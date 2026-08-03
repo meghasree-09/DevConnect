@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../api/api";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
 import {
   FaUserCircle,
@@ -90,6 +91,12 @@ function UserProfile() {
   }
 
   return (
+
+<DashboardLayout
+    role="user"
+    user={user}
+    onLogout={logout}
+>
 
     <div className="user-profile">
 
@@ -360,7 +367,7 @@ function UserProfile() {
       </div>
 
     </div>
-
+</DashboardLayout>
   );
 
 }
