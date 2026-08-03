@@ -10,6 +10,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  position: relative;
+  overflow: visible;
+  z-index: 999;
 }
 
 /* LEFT */
@@ -201,23 +205,25 @@ font-size:12px;
 
 position:absolute;
 
+top:70px;
+
 right:0;
 
-top:75px;
-
-width:200px;
+width:220px;
 
 background:#1e293b;
 
 border-radius:15px;
 
+box-shadow:0 15px 35px rgba(0,0,0,.4);
+
+z-index:9999;
+
 overflow:hidden;
 
-box-shadow:0 10px 25px rgba(0,0,0,.3);
+display:flex;
 
-z-index:1000;
-
-animation:fade .25s ease;
+flex-direction:column;
 
 }
 
@@ -355,4 +361,8 @@ font-size:14px;
 
 }
 
+}
+.profile{
+    position:relative;
+    z-index:9999;
 }
