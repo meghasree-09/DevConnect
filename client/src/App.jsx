@@ -11,6 +11,8 @@ import Developers from "./Pages/Developers/Developers";
 import DeveloperProfile from "./Pages/Developers/DeveloperProfile";
 import AdminProfile from "./Pages/admin/AdminProfile";
 import LeadProfile from "./Pages/lead/LeadProfile";
+import EditProfile from "./Pages/EditProfile/EditProfile";
+import Settings from "./Pages/Settings/Settings";
 import CreateDeveloper from "./Pages/Developers/CreateDeveloper";
 
 import Contact from "./Pages/Contact/Contact";
@@ -102,6 +104,15 @@ function App() {
 />
 
 <Route
+  path="/edit-profile"
+  element={
+    <ProtectedRoute role="user">
+      <EditProfile />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
   path="/lead/profile"
   element={
     <ProtectedRoute role="projectLead">
@@ -164,6 +175,15 @@ function App() {
         path="/notifications"
         element={<Notifications />}
       />
+
+      <Route
+  path="/settings"
+  element={
+    <ProtectedRoute role="user">
+      <Settings />
+    </ProtectedRoute>
+  }
+/>
 
       {/* Error */}
       <Route path="*" element={<ErrorPage />} />
