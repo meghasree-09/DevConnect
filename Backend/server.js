@@ -14,6 +14,7 @@ import taskRoutes from "./routes/taskRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import resourceRoutes from "./routes/resourceRoutes.js";
+import settingsRoutes from "./routes/settingsRoutes.js";
 import dotenv from "dotenv";
 import cors from "cors"
 import http from "http";
@@ -63,6 +64,10 @@ app.use("/team", teamRoutes);
 app.use("/tasks", taskRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/messages", messageRoutes);
+app.use(
+    "/settings",
+    settingsRoutes
+);
 
 const io = new Server(server, {
   cors: {
