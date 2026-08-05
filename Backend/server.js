@@ -15,6 +15,7 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import resourceRoutes from "./routes/resourceRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
+import bugReportRoutes from "./routes/bugReportRoutes.js";
 import dotenv from "dotenv";
 import cors from "cors"
 import http from "http";
@@ -68,6 +69,7 @@ app.use(
     "/settings",
     settingsRoutes
 );
+app.use("/api/bug-reports", bugReportRoutes);
 
 const io = new Server(server, {
   cors: {
