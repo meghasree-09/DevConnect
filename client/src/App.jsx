@@ -13,6 +13,7 @@ import AdminProfile from "./Pages/admin/AdminProfile";
 import LeadProfile from "./Pages/lead/LeadProfile";
 import EditProfile from "./Pages/EditProfile/EditProfile";
 import Settings from "./Pages/Settings/Settings";
+import Help from "./Pages/Help/Help";
 import CreateDeveloper from "./Pages/Developers/CreateDeveloper";
 
 import Contact from "./Pages/Contact/Contact";
@@ -179,8 +180,17 @@ function App() {
       <Route
   path="/settings"
   element={
-    <ProtectedRoute role="user">
+    <ProtectedRoute>
       <Settings />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/help"
+  element={
+    <ProtectedRoute>
+      <Help />
     </ProtectedRoute>
   }
 />
